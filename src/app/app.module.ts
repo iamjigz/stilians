@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { MaterialModule } from './core/modules/material.module';
 import { CoreModule } from './core/modules/core.module';
-
+import { InventoryModule } from './inventory/inventory.module';
 // Components
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -18,7 +18,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    CoreModule
+    CoreModule,
+    InventoryModule
   ],
   providers: [],
   bootstrap: [AppComponent]
