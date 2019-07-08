@@ -1,23 +1,10 @@
 <mat-spinner *ngIf="loading$ | async" [style.display]="'block'"></mat-spinner>
 
-<!-- <div *ngIf="noResults$ | async">
+<div *ngIf="noResults$ | async">
   No results
 </div>
-<div
-  class="card bg-light mb-3"
-  style="max-width: 18rem;"
-  *ngFor="let item of items$ | async"
->
-  <div class="card-header">{{ item.name }}</div>
-  <div class="card-body">
-    <h5 class="card-title">{{ item.id }}</h5>
-    <p class="card-text">{{ item.cost }}</p>
-    <button (click)="delete(item)" class="btn btn-danger">Delete</button>
-    <button mat-raised-button color="primary">Primary</button>
-  </div>
-</div> -->
 
-<!-- <main fxLayout="column" fxLayoutGap="30px">
+<main fxLayout="column" fxLayoutGap="30px">
   <mat-accordion class="dashboard-card">
     <mat-expansion-panel *ngFor="let item of items$ | async">
       <mat-expansion-panel-header class="right-aligned-header">
@@ -31,7 +18,7 @@
 
       <section fxLayout fxLayoutAlign="space-between end">
         <mat-list dense>
-          <h3 matSubheader>Branch: {{ item.name }}</h3>
+          <h3 matSubheader>ID: {{ item.id }}</h3>
           <mat-list-item> Name: {{ item.name }} </mat-list-item>
           <mat-list-item> Generic: {{ item.genericName }} </mat-list-item>
           <mat-list-item> Supplier: {{ item.supplier }} </mat-list-item>
@@ -52,14 +39,14 @@
       </section>
 
       <mat-action-row fxLayoutGap="20px">
-        <button mat-raised-button color="warn">
+        <button mat-raised-button color="warn" (click)="delete(item)">
           Delete
         </button>
 
-        <button mat-raised-button color="primary" (click)="update(p)">
+        <button mat-raised-button color="primary" (click)="update(item)">
           Update
         </button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>
-</main> -->
+</main>

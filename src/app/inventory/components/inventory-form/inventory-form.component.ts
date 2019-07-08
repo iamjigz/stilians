@@ -14,7 +14,11 @@ export class InventoryFormComponent implements OnInit {
     id: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
     genericName: new FormControl('', Validators.required),
-    expiryDate: new FormControl('', Validators.required)
+    supplier: new FormControl('', Validators.required),
+    quantity: new FormControl('', Validators.required),
+    expiryDate: new FormControl('', Validators.required),
+    cost: new FormControl('', Validators.required),
+    retailPrice: new FormControl('', Validators.required)
   });
   status$: Observable<string>;
 

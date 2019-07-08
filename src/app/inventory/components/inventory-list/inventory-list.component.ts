@@ -24,4 +24,6 @@ export class InventoryListComponent implements OnInit {
   delete(item: Item) {
     this.inventory.delete(item.id);
   }
+
+  update(item: Item) {}
 }
