@@ -16,8 +16,8 @@ import { NavigationComponent } from './navigation/navigation.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     MaterialModule,
+    BrowserAnimationsModule,
     CoreModule,
     InventoryModule
   ],

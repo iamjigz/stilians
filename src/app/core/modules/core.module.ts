@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
-
 // NgRx
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from '../../store/reducers';
@@ -17,6 +14,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule } from './material.module';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -28,7 +29,8 @@ import { environment } from 'src/environments/environment';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MaterialModule
   ],
   exports: [
     CommonModule,
@@ -38,7 +40,9 @@ import { environment } from 'src/environments/environment';
     StoreRouterConnectingModule,
     AngularFireModule,
     AngularFirestoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    MaterialModule
   ]
 })
 export class CoreModule {}

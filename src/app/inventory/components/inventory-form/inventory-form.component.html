@@ -12,19 +12,6 @@
       Please enter a Name.
     </div>
   </div>
-  <!-- <div class="form-group">
-    <select
-      class="custom-select"
-      formControlName="location"
-      [class.is-invalid]="isInvalid('location')"
-    >
-      <option value="" selected>Choose location</option>
-      <option *ngFor="let loc of locations" [ngValue]="loc">{{ loc }}</option>
-    </select>
-    <div class="invalid-feedback">
-      Please select a Location.
-    </div>
-  </div> -->
   <div class="form-group form-check">
     <input
       type="checkbox"
@@ -45,3 +32,93 @@
   </button>
   <span class="ml-2">{{ status$ | async }}</span>
 </form>
+
+<mat-card class="dashboard-card">
+  <mat-card-header>
+    <mat-card-title>
+      Add New Product
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="dashboard-card-content">
+    <form [formGroup]="form" fxLayout="column" fxLayoutGap="10px">
+      <div fxFlex fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input required matInput placeholder="Name" />
+          <mat-icon matPrefix>label_important</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Generic Name</mat-label>
+          <input required matInput placeholder="Generic Name" />
+          <mat-icon matPrefix>label_important</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Supplier</mat-label>
+          <input required matInput placeholder="Supplier" />
+          <mat-icon matPrefix>label_important</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-divider [inset]="true"></mat-divider>
+
+      <div fxLayout fxLayoutGap="10px">
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input required matInput placeholder="Quantity" type="number" />
+          <mat-icon matPrefix>label_important</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Expiry Date</mat-label>
+          <input
+            required
+            matInput
+            placeholder="Expiry Date"
+            [matDatepicker]="picker"
+          />
+          <mat-datepicker-toggle
+            matPrefix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout fxLayoutGap="10px">
+        <mat-form-field fxFlex appearance="standard">
+          <mat-label>Cost</mat-label>
+          <input required matInput placeholder="Cost" type="number" />
+          <span matPrefix>PHP&nbsp;</span>
+        </mat-form-field>
+
+        <mat-form-field fxFlex appearance="standard">
+          <mat-label>Retail Price</mat-label>
+          <input required matInput placeholder="Retail Price" type="number" />
+          <span matPrefix>PHP&nbsp;</span>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions fxLayout fxLayoutGap="10px">
+    <button fxFlex mat-raised-button color="accent" (click)="form.reset()">
+      Clear
+    </button>
+
+    <button
+      fxFlex
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!form.valid"
+    >
+      Add
+    </button>
+  </mat-card-actions>
+
+  <mat-card-footer>
+    <!-- <mat-error *ngIf="form.invalid">{{  }}</mat-error> -->
+  </mat-card-footer>
+</mat-card>

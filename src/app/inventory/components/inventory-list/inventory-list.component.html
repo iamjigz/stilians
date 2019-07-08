@@ -1,7 +1,6 @@
-<div *ngIf="loading$ | async">
-  Loading...
-</div>
-<div *ngIf="noResults$ | async">
+<mat-spinner *ngIf="loading$ | async" [style.display]="'block'"></mat-spinner>
+
+<!-- <div *ngIf="noResults$ | async">
   No results
 </div>
 <div
@@ -14,5 +13,53 @@
     <h5 class="card-title">{{ item.id }}</h5>
     <p class="card-text">{{ item.cost }}</p>
     <button (click)="delete(item)" class="btn btn-danger">Delete</button>
+    <button mat-raised-button color="primary">Primary</button>
   </div>
-</div>
+</div> -->
+
+<!-- <main fxLayout="column" fxLayoutGap="30px">
+  <mat-accordion class="dashboard-card">
+    <mat-expansion-panel *ngFor="let item of items$ | async">
+      <mat-expansion-panel-header class="right-aligned-header">
+        <mat-panel-title>
+          {{ item.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+          QTY: {{ item.quantity }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section fxLayout fxLayoutAlign="space-between end">
+        <mat-list dense>
+          <h3 matSubheader>Branch: {{ item.name }}</h3>
+          <mat-list-item> Name: {{ item.name }} </mat-list-item>
+          <mat-list-item> Generic: {{ item.genericName }} </mat-list-item>
+          <mat-list-item> Supplier: {{ item.supplier }} </mat-list-item>
+        </mat-list>
+
+        <mat-list dense>
+          <mat-list-item> Quantity: {{ item.quantity }} </mat-list-item>
+          <mat-list-item>
+            Cost: {{ item.cost | currency: 'PHP':'symbol' }}
+          </mat-list-item>
+          <mat-list-item>
+            Retail Price: {{ item.retailPrice | currency: 'PHP':'symbol' }}
+          </mat-list-item>
+          <mat-list-item>
+            Expiry: {{ item.expiryDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
+          </mat-list-item>
+        </mat-list>
+      </section>
+
+      <mat-action-row fxLayoutGap="20px">
+        <button mat-raised-button color="warn">
+          Delete
+        </button>
+
+        <button mat-raised-button color="primary" (click)="update(p)">
+          Update
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</main> -->
