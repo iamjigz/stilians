@@ -1,1 +1,18 @@
-<p>inventory-list works!</p>
+<div *ngIf="loading$ | async">
+  Loading...
+</div>
+<div *ngIf="noResults$ | async">
+  No results
+</div>
+<div
+  class="card bg-light mb-3"
+  style="max-width: 18rem;"
+  *ngFor="let item of items$ | async"
+>
+  <div class="card-header">{{ item.name }}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ item.id }}</h5>
+    <p class="card-text">{{ item.cost }}</p>
+    <button (click)="delete(item)" class="btn btn-danger">Delete</button>
+  </div>
+</div>
