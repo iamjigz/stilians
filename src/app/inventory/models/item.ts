@@ -5,6 +5,7 @@ export interface Item {
   expiryDate: any;
   quantity: number;
   supplier: string;
-  cost: number;
+  purchaseDate: any;
+  purchasePrice: number;
   retailPrice: number;
 }

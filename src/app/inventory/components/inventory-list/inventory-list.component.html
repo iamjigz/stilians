@@ -1,10 +1,15 @@
-<mat-spinner *ngIf="loading$ | async" [style.display]="'block'"></mat-spinner>
-
-<div *ngIf="noResults$ | async">
-  No results
-</div>
-
 <main fxLayout="column" fxLayoutGap="30px">
+  <div fxLayoutAlign="center center">
+    <mat-spinner
+      *ngIf="loading$ | async"
+      [style.display]="'block'"
+    ></mat-spinner>
+  </div>
+
+  <div *ngIf="noResults$ | async">
+    No results
+  </div>
+
   <mat-accordion class="dashboard-card">
     <mat-expansion-panel *ngFor="let item of items$ | async">
       <mat-expansion-panel-header class="right-aligned-header">
@@ -27,11 +32,13 @@
         <mat-list dense>
           <mat-list-item> Quantity: {{ item.quantity }} </mat-list-item>
           <mat-list-item>
-            Cost: {{ item.cost | currency: 'PHP':'symbol' }}
+            Purchase Price: {{ item.purchasePrice }}
           </mat-list-item>
           <mat-list-item>
-            Retail Price: {{ item.retailPrice | currency: 'PHP':'symbol' }}
+            Purchase Date:
+            {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
           </mat-list-item>
+          <mat-list-item> Retail Price: {{ item.retailPrice }} </mat-list-item>
           <mat-list-item>
             Expiry: {{ item.expiryDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
           </mat-list-item>
