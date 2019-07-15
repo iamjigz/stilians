@@ -7,12 +7,14 @@ import { CoreModule } from '../core/modules/core.module';
 import { InventoryPageComponent } from './components/inventory-page/inventory-page.component';
 import { InventoryListComponent } from './components/inventory-list/inventory-list.component';
 import { InventoryFormComponent } from './components/inventory-form/inventory-form.component';
+import { InventoryTableComponent } from './components/inventory-table/inventory-table.component';
 
 @NgModule({
   declarations: [
     InventoryPageComponent,
     InventoryListComponent,
-    InventoryFormComponent
+    InventoryFormComponent,
+    InventoryTableComponent
   ],
   imports: [
     CommonModule,

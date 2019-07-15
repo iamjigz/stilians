@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { InventoryService } from './../../services/inventory.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,12 +17,17 @@ export class InventoryFormComponent implements OnInit {
     supplier: new FormControl('', Validators.required),
     quantity: new FormControl('', Validators.required),
     expiryDate: new FormControl('', Validators.required),
-    cost: new FormControl('', Validators.required),
+    purchaseDate: new FormControl('', Validators.required),
+    purchasePrice: new FormControl('', Validators.required),
     retailPrice: new FormControl('', Validators.required)
   });
   status$: Observable<string>;
+  formattedAmount: string;
 
-  constructor(private inventory: InventoryService) {}
+  constructor(
+    private inventory: InventoryService,
+    private currencyPipe: CurrencyPipe
+  ) {}
 
   ngOnInit() {
     this.status$ = this.inventory.formStatus$;
@@ -33,6 +38,11 @@ export class InventoryFormComponent implements OnInit {
       this.form.controls[name].invalid &&
       (this.form.controls[name].dirty || this.form.controls[name].touched)
     );
+  }
+
+  transformDecimal(name: string) {
+    const amount: number = this.form.get(name).value;
+    this.form.controls[name].patchValue(amount.toFixed(2));
   }
 
   async submit() {

@@ -1,5 +1,5 @@
 <form
-  [formGroup]="form"
+  [(formGroup)]="form"
   (ngSubmit)="submit()"
   fxLayout="column"
   fxLayoutGap="10px"
@@ -43,19 +43,6 @@
       </div>
 
       <div fxLayout fxLayoutGap="10px">
-        <mat-form-field fxFlex appearance="outline">
-          <mat-label>Generic Name</mat-label>
-          <input
-            required
-            matInput
-            placeholder="Generic Name"
-            id="genericName"
-            formControlName="genericName"
-            [class.is-invalid]="isInvalid('genericName')"
-          />
-          <mat-icon matPrefix>label_important</mat-icon>
-        </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>Supplier</mat-label>
           <input
@@ -68,9 +55,20 @@
           />
           <mat-icon matPrefix>label_important</mat-icon>
         </mat-form-field>
-      </div>
 
-      <mat-divider [inset]="true"></mat-divider>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Generic Name</mat-label>
+          <input
+            required
+            matInput
+            placeholder="Generic Name"
+            id="genericName"
+            formControlName="genericName"
+            [class.is-invalid]="isInvalid('genericName')"
+          />
+          <mat-icon matPrefix>label_important</mat-icon>
+        </mat-form-field>
+      </div>
 
       <div fxLayout fxLayoutGap="10px">
         <mat-form-field fxFlex appearance="outline">
@@ -93,30 +91,49 @@
             required
             matInput
             placeholder="Expiry Date"
-            [matDatepicker]="picker"
+            [matDatepicker]="expiryDate"
             id="expiryDate"
             formControlName="expiryDate"
             [class.is-invalid]="isInvalid('expiryDate')"
           />
           <mat-datepicker-toggle
             matPrefix
-            [for]="picker"
+            [for]="expiryDate"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #expiryDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Purchase Date</mat-label>
+          <input
+            required
+            matInput
+            placeholder="Purchase Date"
+            [matDatepicker]="purchaseDate"
+            id="purchaseDate"
+            formControlName="purchaseDate"
+            [class.is-invalid]="isInvalid('purchaseDate')"
+          />
+          <mat-datepicker-toggle
+            matPrefix
+            [for]="purchaseDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #purchaseDate></mat-datepicker>
         </mat-form-field>
       </div>
 
       <div fxLayout fxLayoutGap="10px">
         <mat-form-field fxFlex appearance="standard">
-          <mat-label>Cost</mat-label>
+          <mat-label>Purchase Price</mat-label>
           <input
             required
             matInput
-            placeholder="Cost"
+            placeholder="Purchase Price"
             type="number"
-            id="cost"
-            formControlName="cost"
-            [class.is-invalid]="isInvalid('cost')"
+            id="purchasePrice"
+            formControlName="purchasePrice"
+            (blur)="transformDecimal('purchasePrice')"
+            [class.is-invalid]="isInvalid('purchasePrice')"
           />
           <span matPrefix>PHP&nbsp;</span>
         </mat-form-field>
@@ -130,6 +147,7 @@
             type="number"
             id="retailPrice"
             formControlName="retailPrice"
+            (blur)="transformDecimal('retailPrice')"
             [class.is-invalid]="isInvalid('retailPrice')"
           />
           <span matPrefix>PHP&nbsp;</span>
@@ -139,6 +157,7 @@
 
     <mat-card-actions fxLayout fxLayoutGap="10px">
       <button
+        fxFlex
         mat-raised-button
         color="primary"
         type="submit"
