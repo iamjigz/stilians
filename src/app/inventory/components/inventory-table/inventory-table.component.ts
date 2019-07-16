@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,10 +14,9 @@ import { Item } from '../../models/item';
 export class InventoryTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-  loading$: Observable<boolean>;
+  @Input() data: Observable<Item[]>;
   items$: Observable<Item[]>;
-  noResults$: Observable<boolean>;
+
   displayedColumns: string[] = [
     'id',
     'name',
@@ -34,9 +33,8 @@ export class InventoryTableComponent implements OnInit {
   constructor(private inventory: InventoryService) {}
 
   ngOnInit() {
-    this.loading$ = this.inventory.loading$;
-    this.noResults$ = this.inventory.noResults$;
-    this.items$ = this.inventory.items$;
+    this.items$ = this.data;
+
     this.items$.subscribe(items => {
       this.dataSource = new MatTableDataSource(items);
       this.dataSource.paginator = this.paginator;

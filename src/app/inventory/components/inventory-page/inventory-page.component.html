@@ -6,15 +6,31 @@
       </h1>
     </div>
   </div>
-  <div fxLayout="column" fxLayoutGap="20px">
-    <div class="col-6">
-      <app-inventory-table></app-inventory-table>
+
+  <section>
+    <div fxLayoutAlign="center center">
+      <mat-spinner
+        *ngIf="loading$ | async"
+        [style.display]="'block'"
+      ></mat-spinner>
     </div>
-    <div class="col-6">
-      <app-inventory-list></app-inventory-list>
+
+    <div *ngIf="noResults$ | async">
+      No results
     </div>
-    <div class="col-6">
-      <app-inventory-form></app-inventory-form>
+  </section>
+
+  <section>
+    <div fxLayout="column" fxLayoutGap="20px">
+      <div class="col-6">
+        <app-inventory-table [data]="items$"></app-inventory-table>
+      </div>
+      <div class="col-6">
+        <app-inventory-list [data]="items$"></app-inventory-list>
+      </div>
+      <div class="col-6">
+        <app-inventory-form></app-inventory-form>
+      </div>
     </div>
-  </div>
+  </section>
 </div>
