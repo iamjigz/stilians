@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { Item } from '../../models/item';
@@ -9,20 +9,17 @@ import { Item } from '../../models/item';
   styleUrls: ['./inventory-list.component.css']
 })
 export class InventoryListComponent implements OnInit {
-  loading$: Observable<boolean>;
+  @Input() data: Observable<Item[]>;
   items$: Observable<Item[]>;
-  noResults$: Observable<boolean>;
 
   constructor(private inventory: InventoryService) {}
 
   ngOnInit() {
-    this.loading$ = this.inventory.loading$;
-    this.noResults$ = this.inventory.noResults$;
-    this.items$ = this.inventory.items$;
+    this.items$ = this.data;
   }
 
   delete(item: Item) {
-    this.inventory.delete(item.id);
+    this.inventory.delete(item.ref);
   }
 
   update(item: Item) {}

@@ -1,15 +1,4 @@
 <main fxLayout="column" fxLayoutGap="30px">
-  <div fxLayoutAlign="center center">
-    <mat-spinner
-      *ngIf="loading$ | async"
-      [style.display]="'block'"
-    ></mat-spinner>
-  </div>
-
-  <div *ngIf="noResults$ | async">
-    No results
-  </div>
-
   <mat-accordion class="dashboard-card">
     <mat-expansion-panel *ngFor="let item of items$ | async">
       <mat-expansion-panel-header class="right-aligned-header">

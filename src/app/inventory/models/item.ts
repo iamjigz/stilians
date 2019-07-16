@@ -1,4 +1,5 @@
 export interface Item {
+  ref?: string;
   id: string;
   name: string;
   genericName: string;

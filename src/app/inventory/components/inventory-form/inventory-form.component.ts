@@ -24,10 +24,7 @@ export class InventoryFormComponent implements OnInit {
   status$: Observable<string>;
   formattedAmount: string;
 
-  constructor(
-    private inventory: InventoryService,
-    private currencyPipe: CurrencyPipe
-  ) {}
+  constructor(private inventory: InventoryService) {}
 
   ngOnInit() {
     this.status$ = this.inventory.formStatus$;
