@@ -1,15 +1,25 @@
-<main fxLayout="column" fxLayoutGap="30px">
-  <mat-accordion class="dashboard-card">
-    <mat-expansion-panel *ngFor="let stock of stock$ | async">
-      <mat-expansion-panel-header class="right-aligned-header">
-        <mat-panel-title>
-          {{ stock.name }}
-        </mat-panel-title>
-        <mat-panel-description>
-          Stock: {{ stock.total }}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <!-- 
+<mat-card fxLayout="column" fxLayoutGap="30px">
+  <mat-card-header>
+    <mat-card-title>Stock</mat-card-title>
+    <mat-card-subtitle>
+      Shows remaining total of each item.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-accordion class="dashboard-card">
+      <mat-expansion-panel *ngFor="let stock of stock$ | async">
+        <mat-expansion-panel-header class="right-aligned-header">
+          <mat-panel-title>
+            {{ stock.name }}
+          </mat-panel-title>
+          <mat-panel-description>
+            Stock: {{ stock.total }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        //TODO: ADD LIST OF ITEMS
+        <!-- 
       <section fxLayout fxLayoutAlign="space-between end">
         <mat-list dense>
           <h3 matSubheader>ID: {{ item.id }}</h3>
@@ -43,6 +53,7 @@
           Update
         </button>
       </mat-action-row> -->
-    </mat-expansion-panel>
-  </mat-accordion>
-</main>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
