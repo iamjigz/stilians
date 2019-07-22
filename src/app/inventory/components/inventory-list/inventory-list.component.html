@@ -1,15 +1,13 @@
 <main fxLayout="column" fxLayoutGap="30px">
   <mat-accordion class="dashboard-card">
-    <mat-expansion-panel *ngFor="let item of items$ | async">
+    <mat-expansion-panel *ngFor="let stock of stock$ | async">
       <mat-expansion-panel-header class="right-aligned-header">
         <mat-panel-title>
-          {{ item.name }}
+          {{ stock.name }}
         </mat-panel-title>
-        <mat-panel-description>
-          QTY: {{ item.quantity }}
-        </mat-panel-description>
+        <mat-panel-description> QTY: {{ stock.total }} </mat-panel-description>
       </mat-expansion-panel-header>
-
+      <!-- 
       <section fxLayout fxLayoutAlign="space-between end">
         <mat-list dense>
           <h3 matSubheader>ID: {{ item.id }}</h3>
@@ -42,7 +40,7 @@
         <button mat-raised-button color="primary" (click)="update(item)">
           Update
         </button>
-      </mat-action-row>
+      </mat-action-row> -->
     </mat-expansion-panel>
   </mat-accordion>
 </main>
