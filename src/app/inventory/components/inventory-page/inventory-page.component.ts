@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
-import { Item } from '../../models/item';
+import { Item, Stock } from '../../models/item';
 
 @Component({
   selector: 'app-inventory-page',
@@ -11,6 +11,7 @@ import { Item } from '../../models/item';
 export class InventoryPageComponent implements OnInit {
   loading$: Observable<boolean>;
   items$: Observable<Item[]>;
+  stock$: Observable<Stock[]>;
   noResults$: Observable<boolean>;
 
   constructor(private inventory: InventoryService) {}
@@ -19,5 +20,6 @@ export class InventoryPageComponent implements OnInit {
     this.loading$ = this.inventory.loading$;
     this.noResults$ = this.inventory.noResults$;
     this.items$ = this.inventory.items$;
+    this.stock$ = this.inventory.stock$;
   }
 }
