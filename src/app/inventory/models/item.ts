@@ -10,3 +10,9 @@ export interface Item {
   purchasePrice: number;
   retailPrice: number;
 }
+
+export interface Stock {
+  name: string;
+  total: number;
+  items?: Item[];
+}

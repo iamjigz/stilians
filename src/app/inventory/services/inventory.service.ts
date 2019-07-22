@@ -2,7 +2,7 @@ import { InventoryPageStore } from './inventory-page.store';
 import { InventoryFirestore } from './inventory.firestore';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Item } from '../models/item';
+import { Item, Stock } from '../models/item';
 import { tap, map } from 'rxjs/operators';
 
 @Injectable({
@@ -20,7 +20,8 @@ export class InventoryService {
           this.store.patch(
             {
               loading: false,
-              items
+              items,
+              stock: this.checkStock(items)
             },
             `[INVENTORY] collection subscription`
           );
@@ -29,10 +30,28 @@ export class InventoryService {
       .subscribe();
   }
 
+  private checkStock(items: Item[]) {
+    const key = {};
+    return items.reduce((arr, item) => {
+      if (key.hasOwnProperty(item.name)) {
+        arr[key[item.name]].total += Number(item.quantity);
+      } else {
+        key[item.name] = arr.length;
+        arr.push({ name: item.name, total: Number(item.quantity) });
+      }
+
+      return arr;
+    }, []);
+  }
+
   get items$(): Observable<Item[]> {
     return this.store.state$.pipe(
       map(state => (state.loading ? [] : state.items))
     );
+  }
+
+  get stock$(): Observable<Stock[]> {
+    return this.store.state$.pipe(map(state => state.stock));
   }
 
   get loading$(): Observable<boolean> {

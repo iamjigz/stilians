@@ -11,7 +11,8 @@ export class InventoryPageStore extends StoreService<InventoryPage> {
   constructor() {
     super({
       loading: true,
-      items: []
+      items: [],
+      stock: []
     });
   }
 }
