@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './core/modules/material.module';
 import { CoreModule } from './core/modules/core.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 // Components
 import { AppComponent } from './app.component';
@@ -23,7 +24,8 @@ import { CurrencyPipe } from '@angular/common';
     MaterialModule,
     BrowserAnimationsModule,
     CoreModule,
-    InventoryModule
+    InventoryModule,
+    TransactionsModule
   ],
   providers: [CurrencyPipe],
   bootstrap: [AppComponent]

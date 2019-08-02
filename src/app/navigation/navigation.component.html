@@ -1,13 +1,20 @@
 <mat-sidenav-container fullscreen class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav">
+  <mat-sidenav #drawer class="sidenav">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-        <a mat-list-item href="#">Home</a>
-        <a mat-list-item href="#">Dashboard</a>
-      <a mat-list-item [routerLink]="['/inventory']" routerLinkActive="active">Inventory</a>
-      <a mat-list-item href="#">Transactions</a>
+      <a mat-list-item href="#">Home</a>
+      <a mat-list-item [routerLink]="['/dashboard']" routerLinkActive="active"
+        >Dashboard</a
+      >
+      <a mat-list-item [routerLink]="['/inventory']" routerLinkActive="active">
+        Inventory
+      </a>
+      <a
+        mat-list-item
+        [routerLink]="['/transactions']"
+        routerLinkActive="active"
+        >Transactions</a
+      >
       <a mat-list-item href="#">Reports</a>
     </mat-nav-list>
   </mat-sidenav>
@@ -17,7 +24,8 @@
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()">
+        (click)="drawer.toggle()"
+      >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>ST. ILIAN's Pharmacy</span>
