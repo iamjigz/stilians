@@ -1,1 +1,36 @@
-<p>transactions-page works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <h1>
+        Transactions
+      </h1>
+    </div>
+  </div>
+
+  <!-- <section>
+    <div fxLayoutAlign="center center">
+      <mat-spinner
+        *ngIf="loading$ | async"
+        [style.display]="'block'"
+      ></mat-spinner>
+    </div>
+
+    <div *ngIf="noResults$ | async">
+      No results
+    </div>
+  </section> -->
+
+  <section>
+    <div fxLayout="column" fxLayoutGap="20px">
+      <!-- <div class="col-6">
+            <app-inventory-list [data]="stock$"></app-inventory-list>
+          </div>
+          <div class="col-6">
+            <app-inventory-table [data]="items$"></app-inventory-table>
+          </div> -->
+      <div class="col-6">
+        <app-transactions-form></app-transactions-form>
+      </div>
+    </div>
+  </section>
+</div>
