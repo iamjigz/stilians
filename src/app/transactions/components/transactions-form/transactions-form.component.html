@@ -1,6 +1,6 @@
 <main fxLayout="column" fxLayoutGap="30px">
   <form
-    [(formGroup)]="form"
+    [(formGroup)]="transactionForm"
     (ngSubmit)="submit()"
     fxLayout="column"
     fxLayoutGap="10px"
@@ -15,144 +15,48 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div fxLayout fxLayoutGap="10px">
-          <mat-form-field appearance="outline">
-            <mat-label>Product ID</mat-label>
-            <input
-              required
-              matInput
-              placeholder="ID"
-              id="id"
-              formControlName="id"
-              [class.is-invalid]="isInvalid('id')"
-            />
-            <mat-icon matPrefix>label_important</mat-icon>
-          </mat-form-field>
+        <div fxFlex fxLayout="column" fxLayoutGap="10px">
+          <form [formGroup]="itemForm" fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout fxLayoutGap="10px">
+              <mat-form-field fxFlex>
+                <input
+                  type="text"
+                  placeholder="Search item"
+                  aria-label="Number"
+                  matInput
+                  formControlName="search"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let stock of stock$ | async"
+                    [value]="stock.name"
+                  >
+                    <span>{{ stock.name }}</span> |
+                    <small>Stock: {{ stock.total }}</small>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
 
-          <mat-form-field fxFlex appearance="outline">
-            <mat-label>Product Name</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Name"
-              id="name"
-              formControlName="name"
-              [class.is-invalid]="isInvalid('name')"
-            />
-            <mat-icon matPrefix>label_important</mat-icon>
-          </mat-form-field>
-        </div>
+            <div fxLayoutGap="10px">
+              <mat-form-field appearance="standard">
+                <mat-label>Quantity</mat-label>
+                <input
+                  required
+                  matInput
+                  type="number"
+                  placeholder="Quantity"
+                  id="quantity"
+                  formControlName="quantity"
+                />
+              </mat-form-field>
 
-        <div fxLayout fxLayoutGap="10px">
-          <mat-form-field appearance="outline">
-            <mat-label>Supplier</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Supplier"
-              id="supplier"
-              formControlName="supplier"
-              [class.is-invalid]="isInvalid('supplier')"
-            />
-            <mat-icon matPrefix>label_important</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field fxFlex appearance="outline">
-            <mat-label>Generic Name</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Generic Name"
-              id="genericName"
-              formControlName="genericName"
-              [class.is-invalid]="isInvalid('genericName')"
-            />
-            <mat-icon matPrefix>label_important</mat-icon>
-          </mat-form-field>
-        </div>
-
-        <div fxLayout fxLayoutGap="10px">
-          <mat-form-field fxFlex appearance="outline">
-            <mat-label>Quantity</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Quantity"
-              type="number"
-              id="quantity"
-              formControlName="quantity"
-              [class.is-invalid]="isInvalid('quantity')"
-            />
-            <mat-icon matPrefix>label_important</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field fxFlex appearance="outline">
-            <mat-label>Expiry Date</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Expiry Date"
-              [matDatepicker]="expiryDate"
-              id="expiryDate"
-              formControlName="expiryDate"
-              [class.is-invalid]="isInvalid('expiryDate')"
-            />
-            <mat-datepicker-toggle
-              matPrefix
-              [for]="expiryDate"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #expiryDate></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field fxFlex appearance="outline">
-            <mat-label>Purchase Date</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Purchase Date"
-              [matDatepicker]="purchaseDate"
-              id="purchaseDate"
-              formControlName="purchaseDate"
-              [class.is-invalid]="isInvalid('purchaseDate')"
-            />
-            <mat-datepicker-toggle
-              matPrefix
-              [for]="purchaseDate"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #purchaseDate></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div fxLayout fxLayoutGap="10px">
-          <mat-form-field fxFlex appearance="standard">
-            <mat-label>Purchase Price</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Purchase Price"
-              type="number"
-              id="purchasePrice"
-              formControlName="purchasePrice"
-              (blur)="transformDecimal('purchasePrice')"
-              [class.is-invalid]="isInvalid('purchasePrice')"
-            />
-            <span matPrefix>PHP&nbsp;</span>
-          </mat-form-field>
-
-          <mat-form-field fxFlex appearance="standard">
-            <mat-label>Retail Price</mat-label>
-            <input
-              required
-              matInput
-              placeholder="Retail Price"
-              type="number"
-              id="retailPrice"
-              formControlName="retailPrice"
-              (blur)="transformDecimal('retailPrice')"
-              [class.is-invalid]="isInvalid('retailPrice')"
-            />
-            <span matPrefix>PHP&nbsp;</span>
-          </mat-form-field>
+              <button mat-raised-button color="primary" type="submit">
+                Add
+              </button>
+            </div>
+          </form>
         </div>
       </mat-card-content>
 
@@ -162,16 +66,41 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="!form.valid"
+          [disabled]="!transactionForm.valid"
         >
-          Add
+          Submit
         </button>
       </mat-card-actions>
 
       <mat-card-footer>
         <!-- <mat-error *ngIf="form.invalid">{{  }}</mat-error> -->
-        <mat-error *ngIf="form.invalid">{{ status$ | async }}</mat-error>
+        <mat-error *ngIf="transactionForm.invalid">{{
+          status$ | async
+        }}</mat-error>
       </mat-card-footer>
     </mat-card>
   </form>
+
+  <!-- <section>
+      <mat-accordion fxFlex>
+        <mat-expansion-panel *ngFor="let stock of stock$ | async">
+          <mat-expansion-panel-header class="right-aligned-header">
+            <mat-panel-title>
+              {{ stock.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              Stock: {{ stock.total }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-action-list>
+        <div *ngFor="let stock of stock$ | async">
+          <button mat-list-item color="accent">
+            {{ stock.name }}
+          </button>
+        </div>
+      </mat-action-list>
+    </section> -->
 </main>

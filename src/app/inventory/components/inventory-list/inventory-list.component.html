@@ -10,11 +10,10 @@
     <mat-accordion class="dashboard-card">
       <mat-expansion-panel *ngFor="let stock of stock$ | async">
         <mat-expansion-panel-header class="right-aligned-header">
-          <mat-panel-title>
-            {{ stock.name }}
-          </mat-panel-title>
+          <mat-panel-title> {{ stock.name }} </mat-panel-title>
           <mat-panel-description>
-            Stock: {{ stock.total }}
+            <span>Price: PHP {{ stock.price }}</span>
+            <small>Stock: {{ stock.total }}</small>
           </mat-panel-description>
         </mat-expansion-panel-header>
 

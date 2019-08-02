@@ -37,7 +37,11 @@ export class InventoryService {
         arr[key[item.name]].total += Number(item.quantity);
       } else {
         key[item.name] = arr.length;
-        arr.push({ name: item.name, total: Number(item.quantity) });
+        arr.push({
+          name: item.name,
+          price: item.retailPrice,
+          total: Number(item.quantity)
+        });
       }
 
       return arr;

@@ -22,5 +22,7 @@ export class InventoryListComponent implements OnInit {
     this.inventory.delete(item.ref);
   }
 
-  update(item: Item) {}
+  update(item: Item) {
+    // TODO: Let user update item by clicking on the list
+  }
 }

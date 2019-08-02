@@ -1,3 +1,9 @@
+export interface Order {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
 export interface Transaction extends Order {
   transid: string;
   orders: Order[];
@@ -5,10 +11,4 @@ export interface Transaction extends Order {
   discount: number;
   tax: number;
   total: number;
-}
-
-export interface Order {
-  name: string;
-  quantity: number;
-  price: number;
 }
