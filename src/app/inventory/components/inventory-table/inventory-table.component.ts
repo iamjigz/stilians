@@ -26,7 +26,9 @@ export class InventoryTableComponent implements OnInit {
     'expiryDate',
     'purchaseDate',
     'purchasePrice',
-    'retailPrice'
+    'retailPrice',
+    'totalPurchase',
+    'delete'
   ];
   dataSource: MatTableDataSource<Item>;
 
@@ -48,5 +50,10 @@ export class InventoryTableComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  delete(row) {
+    this.dataSource.data = this.dataSource.data.filter(i => i !== row);
+    this.inventory.delete(row.ref);
   }
 }
