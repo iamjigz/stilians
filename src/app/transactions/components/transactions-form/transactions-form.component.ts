@@ -4,6 +4,9 @@ import { TransactionsService } from './../../services/transactions.service';
 import { InventoryService } from '../../../inventory/services/inventory.service';
 import { Observable } from 'rxjs';
 import { Stock } from 'src/app/inventory/models/item';
+import { startWith, map } from 'rxjs/operators';
+import { Order } from '../../models/transaction';
+import { MatOption } from '@angular/material';
 
 @Component({
   selector: 'app-transactions-form',
@@ -25,10 +28,14 @@ export class TransactionsFormComponent implements OnInit {
   });
 
   loading$: Observable<boolean>;
-  stock$: Observable<Stock[]>;
   noResults$: Observable<boolean>;
   status$: Observable<string>;
   formattedAmount: string;
+  stock: Stock[];
+  filteredStock$: Observable<Stock[]>;
+
+  selectedItem: Stock;
+  orders: Order[] = [];
 
   constructor(
     private transactions: TransactionsService,
@@ -38,8 +45,20 @@ export class TransactionsFormComponent implements OnInit {
   ngOnInit() {
     this.loading$ = this.inventory.loading$;
     this.noResults$ = this.inventory.noResults$;
-    this.stock$ = this.inventory.stock$;
     this.status$ = this.transactions.formStatus$;
+    this.inventory.stock$.subscribe(data => (this.stock = data));
+
+    this.filteredStock$ = this.itemForm.get('search').valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: Stock) {
+    const filterValue = value.name ? value.name.toLowerCase() : '';
+    return this.stock.filter(stock =>
+      stock.name.toLowerCase().includes(filterValue)
+    );
   }
 
   isInvalid(name: string | number) {
@@ -60,5 +79,26 @@ export class TransactionsFormComponent implements OnInit {
     await this.transactions.create({ ...this.transactionForm.value });
     this.transactionForm.reset();
     this.transactionForm.enable();
+  }
+
+  displayFn(order?: Order): string | undefined {
+    return order ? order.name : undefined;
+  }
+
+  onSelectedItem(option: MatOption) {
+    this.selectedItem = option.value;
+  }
+
+  add() {
+    console.log(this.itemForm.value);
+    const formValue = this.itemForm.value;
+    const order: Order = {
+      name: formValue.search.name,
+      quantity: formValue.quantity,
+      price: formValue.search.price
+    };
+
+    console.log(order);
+    this.orders.push(order);
   }
 }

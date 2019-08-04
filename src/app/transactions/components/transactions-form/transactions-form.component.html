@@ -16,9 +16,14 @@
       </mat-card-header>
       <mat-card-content>
         <div fxFlex fxLayout="column" fxLayoutGap="10px">
-          <form [formGroup]="itemForm" fxLayout="column" fxLayoutGap="10px">
+          <form
+            [formGroup]="itemForm"
+            fxLayout="column"
+            fxLayoutGap="10px"
+            (ngSubmit)="add()"
+          >
             <div fxLayout fxLayoutGap="10px">
-              <mat-form-field fxFlex>
+              <mat-form-field fxFlex appearance="standard">
                 <input
                   type="text"
                   placeholder="Search item"
@@ -27,19 +32,22 @@
                   formControlName="search"
                   [matAutocomplete]="auto"
                 />
-                <mat-autocomplete #auto="matAutocomplete">
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  [displayWith]="displayFn()"
+                  (optionSelected)="onSelectedItem($event.option)"
+                >
                   <mat-option
-                    *ngFor="let stock of stock$ | async"
-                    [value]="stock.name"
+                    *ngFor="let stock of filteredStock$ | async"
+                    [value]="stock"
                   >
                     <span>{{ stock.name }}</span> |
-                    <small>Stock: {{ stock.total }}</small>
+                    <small>Stock: {{ stock.total }} | </small>
+                    <small>Price: {{ stock.price }}</small>
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-            </div>
 
-            <div fxLayoutGap="10px">
               <mat-form-field appearance="standard">
                 <mat-label>Quantity</mat-label>
                 <input
@@ -52,9 +60,32 @@
                 />
               </mat-form-field>
 
-              <button mat-raised-button color="primary" type="submit">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!itemForm.valid"
+              >
                 Add
               </button>
+            </div>
+
+            <div fxLayoutGap="10px">
+              <mat-list>
+                <h3 matSubheader>Purchases</h3>
+                <mat-list-item *ngFor="let order of orders">
+                  <mat-icon matListIcon>folder</mat-icon>
+                  <h4 matLine>{{ order.name }}</h4>
+                  <p matLine class="demo-2">{{ order.quantity }}</p>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <h3 matSubheader>Notes</h3>
+                <!-- <mat-list-item *ngFor="let note of notes">
+                       <mat-icon matListIcon>note</mat-icon>
+                       <h4 matLine>{{note.name}}</h4>
+                       <p matLine class="demo-2"> {{note.updated}} </p>
+                    </mat-list-item> -->
+              </mat-list>
             </div>
           </form>
         </div>
@@ -80,27 +111,4 @@
       </mat-card-footer>
     </mat-card>
   </form>
-
-  <!-- <section>
-      <mat-accordion fxFlex>
-        <mat-expansion-panel *ngFor="let stock of stock$ | async">
-          <mat-expansion-panel-header class="right-aligned-header">
-            <mat-panel-title>
-              {{ stock.name }}
-            </mat-panel-title>
-            <mat-panel-description>
-              Stock: {{ stock.total }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <mat-action-list>
-        <div *ngFor="let stock of stock$ | async">
-          <button mat-list-item color="accent">
-            {{ stock.name }}
-          </button>
-        </div>
-      </mat-action-list>
-    </section> -->
 </main>
