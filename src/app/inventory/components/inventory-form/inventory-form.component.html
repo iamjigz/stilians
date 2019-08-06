@@ -81,7 +81,7 @@
               type="number"
               id="quantity"
               formControlName="quantity"
-              (blur)="getTotalPurchase('purchasePrice', 'quantity')"
+              (blur)="getTotalPurchase()"
               [class.is-invalid]="isInvalid('quantity')"
             />
             <mat-icon matPrefix>label_important</mat-icon>
@@ -134,10 +134,7 @@
               type="number"
               id="purchasePrice"
               formControlName="purchasePrice"
-              (blur)="
-                transformDecimal('purchasePrice');
-                getTotalPurchase('purchasePrice', 'quantity')
-              "
+              (blur)="transformDecimal('purchasePrice'); getTotalPurchase()"
               (click)="$event.target.select()"
               [class.is-invalid]="isInvalid('purchasePrice')"
             />
