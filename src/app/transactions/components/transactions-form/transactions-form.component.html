@@ -31,10 +31,10 @@
                   matInput
                   formControlName="search"
                   [matAutocomplete]="auto"
+                  [value]="displayFn()"
                 />
                 <mat-autocomplete
                   #auto="matAutocomplete"
-                  [displayWith]="displayFn()"
                   (optionSelected)="onSelectedItem($event.option)"
                 >
                   <mat-option
@@ -87,29 +87,35 @@
                     </mat-list-item> -->
               </mat-list>
             </div>
-
-            <mat-form-field fxFlex appearance="outline">
-              <mat-label>Transaction Date</mat-label>
-              <input
-                required
-                matInput
-                placeholder="Transaction Date"
-                [matDatepicker]="timestamp"
-                id="timestamp"
-                formControlName="timestamp"
-                [class.is-invalid]="isInvalid('timestamp')"
-              />
-              <mat-datepicker-toggle
-                matPrefix
-                [for]="timestamp"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #timestamp></mat-datepicker>
-            </mat-form-field>
           </form>
         </div>
       </mat-card-content>
 
-      <mat-card-actions fxLayout fxLayoutGap="10px">
+      <mat-card-actions fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout fxLayoutGap="10px">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Transaction Date</mat-label>
+            <input
+              required
+              matInput
+              placeholder="Transaction Date"
+              [matDatepicker]="timestamp"
+              id="timestamp"
+              formControlName="timestamp"
+              [class.is-invalid]="isInvalid('timestamp')"
+            />
+            <mat-datepicker-toggle
+              matPrefix
+              [for]="timestamp"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #timestamp></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field fxFlex appearance="outline">
+            <input type="text" placeholder="User" matInput />
+          </mat-form-field>
+        </div>
+
         <button
           fxFlex
           mat-raised-button

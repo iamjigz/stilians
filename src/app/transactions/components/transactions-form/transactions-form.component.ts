@@ -82,8 +82,8 @@ export class TransactionsFormComponent implements OnInit {
     this.transactionForm.enable();
   }
 
-  displayFn(order?: Order): string | undefined {
-    return order ? order.name : undefined;
+  displayFn(): string | undefined {
+    return this.selectedItem ? this.selectedItem.name : undefined;
   }
 
   onSelectedItem(option: MatOption) {
@@ -101,5 +101,6 @@ export class TransactionsFormComponent implements OnInit {
 
     console.log(order);
     this.orders.push(order);
+    this.itemForm.reset();
   }
 }
