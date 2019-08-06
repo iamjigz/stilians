@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { InventoryService } from './../../services/inventory.service';
 import { Observable } from 'rxjs';
@@ -17,9 +16,10 @@ export class InventoryFormComponent implements OnInit {
     supplier: new FormControl('', Validators.required),
     quantity: new FormControl('', Validators.required),
     expiryDate: new FormControl('', Validators.required),
-    purchaseDate: new FormControl('', Validators.required),
+    purchaseDate: new FormControl(new Date(), Validators.required),
     purchasePrice: new FormControl('', Validators.required),
-    retailPrice: new FormControl('', Validators.required)
+    retailPrice: new FormControl('', Validators.required),
+    totalPurchase: new FormControl('', Validators.required)
   });
   status$: Observable<string>;
   formattedAmount: string;
@@ -42,10 +42,21 @@ export class InventoryFormComponent implements OnInit {
     this.form.controls[name].patchValue(amount.toFixed(2));
   }
 
+  getTotalPurchase() {
+    const fv = this.form.value;
+    const total = isNaN(fv.purchasePrice * fv.quantity)
+      ? 0
+      : fv.purchasePrice * fv.quantity;
+
+    this.form.controls.totalPurchase.patchValue(total.toFixed(2));
+  }
+
   async submit() {
     this.form.disable();
     await this.inventory.create({ ...this.form.value });
     this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
     this.form.enable();
   }
 }

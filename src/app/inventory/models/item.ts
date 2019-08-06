@@ -9,6 +9,14 @@ export interface Item {
   purchaseDate: any;
   purchasePrice: number;
   retailPrice: number;
+  totalPurchase: number;
+}
+
+export interface Stock {
+  name: string;
+  price: number;
+  total: number;
+  items?: Item[];
 }
 
 export interface Stock {

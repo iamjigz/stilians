@@ -63,6 +63,10 @@ export abstract class FirestoreService<T> {
       });
   }
 
+  update(id: string, data: T) {
+    return this.collection.doc(id).set(data, { merge: true });
+  }
+
   delete(id: string) {
     return this.collection
       .doc(id)

@@ -1,61 +1,38 @@
-import { InventoryPageStore } from './inventory-page.store';
-import { InventoryFirestore } from './inventory.firestore';
+import { TransactionsPageStore } from './transactions-page.store';
+import { TransactionFirestore } from './transactions.firestore';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Item, Stock } from '../models/item';
+import { Transaction, Order } from '../models/transaction';
 import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InventoryService {
+export class TransactionsService {
   constructor(
-    private firestore: InventoryFirestore,
-    private store: InventoryPageStore
+    private firestore: TransactionFirestore,
+    private store: TransactionsPageStore
   ) {
     this.firestore
       .collection$()
       .pipe(
-        tap(items => {
+        tap(transactions => {
           this.store.patch(
             {
               loading: false,
-              items,
-              stock: this.checkStock(items)
+              transactions
             },
-            `[INVENTORY] collection subscription`
+            `[transactions] collection subscription`
           );
         })
       )
       .subscribe();
   }
 
-  private checkStock(items: Item[]) {
-    const key = {};
-    return items.reduce((arr, item) => {
-      if (key.hasOwnProperty(item.name)) {
-        arr[key[item.name]].total += Number(item.quantity);
-      } else {
-        key[item.name] = arr.length;
-        arr.push({
-          name: item.name,
-          price: item.retailPrice,
-          total: Number(item.quantity)
-        });
-      }
-
-      return arr;
-    }, []);
-  }
-
-  get items$(): Observable<Item[]> {
+  get transactions$(): Observable<Transaction[]> {
     return this.store.state$.pipe(
-      map(state => (state.loading ? [] : state.items))
+      map(state => (state.loading ? [] : state.transactions))
     );
-  }
-
-  get stock$(): Observable<Stock[]> {
-    return this.store.state$.pipe(map(state => state.stock));
   }
 
   get loading$(): Observable<boolean> {
@@ -65,7 +42,11 @@ export class InventoryService {
   get noResults$(): Observable<boolean> {
     return this.store.state$.pipe(
       map(state => {
-        return !state.loading && state.items && state.items.length === 0;
+        return (
+          !state.loading &&
+          state.transactions &&
+          state.transactions.length === 0
+        );
       })
     );
   }
@@ -74,23 +55,23 @@ export class InventoryService {
     return this.store.state$.pipe(map(state => state.formStatus));
   }
 
-  create(item: Item) {
+  create(transaction: Transaction) {
     this.store.patch(
       {
         loading: true,
-        items: [],
+        transactions: [],
         formStatus: 'Saving...'
       },
-      '[INVENTORY] create'
+      '[transactions] create'
     );
     return this.firestore
-      .create(item)
+      .create(transaction)
       .then(_ => {
         this.store.patch(
           {
             formStatus: 'Saved!'
           },
-          '[INVENTORY] create SUCCESS'
+          '[transactions] create SUCCESS'
         );
         setTimeout(
           () =>
@@ -98,7 +79,7 @@ export class InventoryService {
               {
                 formStatus: ''
               },
-              '[INVENTORY] create timeout reset formStatus'
+              '[transactions] create timeout reset formStatus'
             ),
           2000
         );
@@ -109,20 +90,23 @@ export class InventoryService {
             loading: false,
             formStatus: 'An error ocurred'
           },
-          '[INVENTORY] create ERROR'
+          '[transactions] create ERROR'
         );
       });
   }
 
   delete(id: string): any {
-    this.store.patch({ loading: true, items: [] }, '[INVENTORY] delete');
+    this.store.patch(
+      { loading: true, transactions: [] },
+      '[transactions] delete'
+    );
     return this.firestore.delete(id).catch(err => {
       this.store.patch(
         {
           loading: false,
           formStatus: 'An error ocurred'
         },
-        '[INVENTORY] delete ERROR'
+        '[transactions] delete ERROR'
       );
     });
   }

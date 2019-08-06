@@ -1,4 +1,10 @@
-<main fxLayout="column" fxLayoutGap="30px">
+<mat-card fxLayout="column" fxLayoutGap="30px">
+  <mat-card-header>
+    <mat-card-title>Purchase History</mat-card-title>
+    <mat-card-subtitle>
+      Shows details for each item purchased.
+    </mat-card-subtitle>
+  </mat-card-header>
   <mat-form-field>
     <input
       matInput
@@ -64,10 +70,28 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="totalPurchase">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Total Purchase
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.totalPurchase }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Delete</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="warn" (click)="delete(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
-</main>
+</mat-card>

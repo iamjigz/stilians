@@ -81,6 +81,7 @@
               type="number"
               id="quantity"
               formControlName="quantity"
+              (blur)="getTotalPurchase()"
               [class.is-invalid]="isInvalid('quantity')"
             />
             <mat-icon matPrefix>label_important</mat-icon>
@@ -125,7 +126,7 @@
 
         <div fxLayout fxLayoutGap="10px">
           <mat-form-field fxFlex appearance="standard">
-            <mat-label>Purchase Price</mat-label>
+            <mat-label>Purchase Price per unit</mat-label>
             <input
               required
               matInput
@@ -133,14 +134,15 @@
               type="number"
               id="purchasePrice"
               formControlName="purchasePrice"
-              (blur)="transformDecimal('purchasePrice')"
+              (blur)="transformDecimal('purchasePrice'); getTotalPurchase()"
+              (click)="$event.target.select()"
               [class.is-invalid]="isInvalid('purchasePrice')"
             />
             <span matPrefix>PHP&nbsp;</span>
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="standard">
-            <mat-label>Retail Price</mat-label>
+            <mat-label>Retail Price per unit</mat-label>
             <input
               required
               matInput
@@ -149,7 +151,23 @@
               id="retailPrice"
               formControlName="retailPrice"
               (blur)="transformDecimal('retailPrice')"
+              (click)="$event.target.select()"
               [class.is-invalid]="isInvalid('retailPrice')"
+            />
+            <span matPrefix>PHP&nbsp;</span>
+          </mat-form-field>
+
+          <mat-form-field fxFlex appearance="standard">
+            <mat-label>Total Purchase</mat-label>
+            <input
+              required
+              matInput
+              placeholder="Total Purchase"
+              type="number"
+              id="totalPurchase"
+              formControlName="totalPurchase"
+              (blur)="transformDecimal('totalPurchase')"
+              [class.is-invalid]="isInvalid('totalPurchase')"
             />
             <span matPrefix>PHP&nbsp;</span>
           </mat-form-field>

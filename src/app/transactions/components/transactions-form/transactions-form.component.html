@@ -1,0 +1,138 @@
+<main fxLayout="column" fxLayoutGap="30px">
+  <form
+    [(formGroup)]="transactionForm"
+    (ngSubmit)="submit()"
+    fxLayout="column"
+    fxLayoutGap="10px"
+  >
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Add New Transaction
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ status$ | async }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxFlex fxLayout="column" fxLayoutGap="10px">
+          <form
+            [formGroup]="itemForm"
+            fxLayout="column"
+            fxLayoutGap="10px"
+            (ngSubmit)="add()"
+          >
+            <div fxLayout fxLayoutGap="10px">
+              <mat-form-field fxFlex appearance="standard">
+                <input
+                  type="text"
+                  placeholder="Search item"
+                  aria-label="Number"
+                  matInput
+                  formControlName="search"
+                  [matAutocomplete]="auto"
+                  [value]="displayFn()"
+                />
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  (optionSelected)="onSelectedItem($event.option)"
+                >
+                  <mat-option
+                    *ngFor="let stock of filteredStock$ | async"
+                    [value]="stock"
+                  >
+                    <span>{{ stock.name }}</span> |
+                    <small>Stock: {{ stock.total }} | </small>
+                    <small>Price: {{ stock.price }}</small>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field appearance="standard">
+                <mat-label>Quantity</mat-label>
+                <input
+                  required
+                  matInput
+                  type="number"
+                  placeholder="Quantity"
+                  id="quantity"
+                  formControlName="quantity"
+                />
+              </mat-form-field>
+
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!itemForm.valid"
+              >
+                Add
+              </button>
+            </div>
+
+            <div fxLayoutGap="10px">
+              <mat-list>
+                <h3 matSubheader>Purchases</h3>
+                <mat-list-item *ngFor="let order of orders">
+                  <mat-icon matListIcon>folder</mat-icon>
+                  <h4 matLine>{{ order.name }}</h4>
+                  <p matLine class="demo-2">{{ order.quantity }}</p>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <h3 matSubheader>Notes</h3>
+                <!-- <mat-list-item *ngFor="let note of notes">
+                       <mat-icon matListIcon>note</mat-icon>
+                       <h4 matLine>{{note.name}}</h4>
+                       <p matLine class="demo-2"> {{note.updated}} </p>
+                    </mat-list-item> -->
+              </mat-list>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout fxLayoutGap="10px">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Transaction Date</mat-label>
+            <input
+              required
+              matInput
+              placeholder="Transaction Date"
+              [matDatepicker]="timestamp"
+              id="timestamp"
+              formControlName="timestamp"
+              [class.is-invalid]="isInvalid('timestamp')"
+            />
+            <mat-datepicker-toggle
+              matPrefix
+              [for]="timestamp"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #timestamp></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field fxFlex appearance="outline">
+            <input type="text" placeholder="User" matInput />
+          </mat-form-field>
+        </div>
+
+        <button
+          fxFlex
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!transactionForm.valid"
+        >
+          Submit
+        </button>
+      </mat-card-actions>
+
+      <mat-card-footer>
+        <!-- <mat-error *ngIf="form.invalid">{{  }}</mat-error> -->
+        <mat-error *ngIf="transactionForm.invalid">{{
+          status$ | async
+        }}</mat-error>
+      </mat-card-footer>
+    </mat-card>
+  </form>
+</main>
