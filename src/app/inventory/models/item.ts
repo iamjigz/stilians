@@ -18,3 +18,9 @@ export interface Stock {
   total: number;
   items?: Item[];
 }
+
+export interface Stock {
+  name: string;
+  total: number;
+  items?: Item[];
+}
