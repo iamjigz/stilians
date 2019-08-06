@@ -19,7 +19,8 @@ export class TransactionsFormComponent implements OnInit {
     subtotal: new FormControl('', Validators.required),
     discount: new FormControl('', Validators.required),
     tax: new FormControl('', Validators.required),
-    total: new FormControl('', Validators.required)
+    total: new FormControl('', Validators.required),
+    timestamp: new FormControl(new Date(), Validators.required)
   });
 
   itemForm: FormGroup = new FormGroup({

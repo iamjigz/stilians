@@ -11,4 +11,5 @@ export interface Transaction extends Order {
   discount: number;
   tax: number;
   total: number;
+  timestamp: Date | string;
 }

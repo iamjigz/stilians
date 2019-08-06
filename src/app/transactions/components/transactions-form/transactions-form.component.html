@@ -87,6 +87,24 @@
                     </mat-list-item> -->
               </mat-list>
             </div>
+
+            <mat-form-field fxFlex appearance="outline">
+              <mat-label>Transaction Date</mat-label>
+              <input
+                required
+                matInput
+                placeholder="Transaction Date"
+                [matDatepicker]="timestamp"
+                id="timestamp"
+                formControlName="timestamp"
+                [class.is-invalid]="isInvalid('timestamp')"
+              />
+              <mat-datepicker-toggle
+                matPrefix
+                [for]="timestamp"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #timestamp></mat-datepicker>
+            </mat-form-field>
           </form>
         </div>
       </mat-card-content>
