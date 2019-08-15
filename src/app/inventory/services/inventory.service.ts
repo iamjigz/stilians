@@ -1,5 +1,6 @@
 import { InventoryPageStore } from './inventory-page.store';
 import { InventoryFirestore } from './inventory.firestore';
+
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item, Stock } from '../models/item';
@@ -20,8 +21,8 @@ export class InventoryService {
           this.store.patch(
             {
               loading: false,
-              items,
-              stock: this.checkStock(items)
+              items
+              // stock: this.checkStock(items)
             },
             `[INVENTORY] collection subscription`
           );
@@ -54,9 +55,9 @@ export class InventoryService {
     );
   }
 
-  get stock$(): Observable<Stock[]> {
-    return this.store.state$.pipe(map(state => state.stock));
-  }
+  // get stock$(): Observable<Stock[]> {
+  //   return this.store.state$.pipe(map(state => state.stock));
+  // }
 
   get loading$(): Observable<boolean> {
     return this.store.state$.pipe(map(state => state.loading));
