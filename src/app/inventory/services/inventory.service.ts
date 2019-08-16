@@ -1,10 +1,11 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+
 import { InventoryPageStore } from './inventory-page.store';
 import { InventoryFirestore } from './inventory.firestore';
 
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Item, Stock } from '../models/item';
-import { tap, map } from 'rxjs/operators';
+import { Item } from '../models/item';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,6 @@ export class InventoryService {
             {
               loading: false,
               items
-              // stock: this.checkStock(items)
             },
             `[INVENTORY] collection subscription`
           );
@@ -31,33 +31,29 @@ export class InventoryService {
       .subscribe();
   }
 
-  private checkStock(items: Item[]) {
-    const key = {};
-    return items.reduce((arr, item) => {
-      if (key.hasOwnProperty(item.name)) {
-        arr[key[item.name]].total += Number(item.quantity);
-      } else {
-        key[item.name] = arr.length;
-        arr.push({
-          name: item.name,
-          price: item.retailPrice,
-          total: Number(item.quantity)
-        });
-      }
+  // private checkStock(items: Item[]) {
+  //   const key = {};
+  //   return items.reduce((arr, item) => {
+  //     if (key.hasOwnProperty(item.name)) {
+  //       arr[key[item.name]].total += Number(item.quantity);
+  //     } else {
+  //       key[item.name] = arr.length;
+  //       arr.push({
+  //         name: item.name,
+  //         price: item.retailPrice,
+  //         total: Number(item.quantity)
+  //       });
+  //     }
 
-      return arr;
-    }, []);
-  }
+  //     return arr;
+  //   }, []);
+  // }
 
   get items$(): Observable<Item[]> {
     return this.store.state$.pipe(
       map(state => (state.loading ? [] : state.items))
     );
   }
-
-  // get stock$(): Observable<Stock[]> {
-  //   return this.store.state$.pipe(map(state => state.stock));
-  // }
 
   get loading$(): Observable<boolean> {
     return this.store.state$.pipe(map(state => state.loading));
@@ -84,6 +80,7 @@ export class InventoryService {
       },
       '[INVENTORY] create'
     );
+
     return this.firestore
       .create(item)
       .then(_ => {

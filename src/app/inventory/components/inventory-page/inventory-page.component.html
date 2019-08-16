@@ -21,10 +21,7 @@
           No stocks found.
         </div>
 
-        <app-inventory-list
-          *ngIf="!stock.noResults$ | async"
-          [data]="stock.stock$"
-        ></app-inventory-list>
+        <app-inventory-list [data]="stock.stock$"></app-inventory-list>
       </div>
       <div class="col-6">
         <div fxLayoutAlign="center center">
@@ -38,10 +35,7 @@
           No results found.
         </div>
 
-        <app-inventory-table
-          *ngIf="!inventory.noResults$ | async"
-          [data]="inventory.items$"
-        ></app-inventory-table>
+        <app-inventory-table [data]="inventory.items$"></app-inventory-table>
       </div>
       <div class="col-6">
         <app-inventory-form></app-inventory-form>
