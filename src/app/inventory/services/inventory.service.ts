@@ -4,8 +4,10 @@ import { tap, map } from 'rxjs/operators';
 
 import { InventoryPageStore } from './inventory-page.store';
 import { InventoryFirestore } from './inventory.firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 
-import { Item } from '../models/item';
+import { Item, Stock } from '../models/item';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ import { Item } from '../models/item';
 export class InventoryService {
   constructor(
     private firestore: InventoryFirestore,
-    private store: InventoryPageStore
+    private store: InventoryPageStore,
+    private afs: AngularFirestore
   ) {
     this.firestore
       .collection$()
@@ -71,7 +74,22 @@ export class InventoryService {
     return this.store.state$.pipe(map(state => state.formStatus));
   }
 
+  add(item: Item): Stock[] {
+    console.log(item.name);
+    let stock = [];
+    const stockQuery = this.afs
+      .collection<Stock>('stock', ref => ref.where('name', '==', item.name))
+      .get()
+      .subscribe(res => (stock = res.docs));
+
+    console.log(stock);
+    // stockQuery.unsubscribe();
+    return stock;
+  }
+
   create(item: Item) {
+    // this.add(item);
+
     this.store.patch(
       {
         loading: true,
