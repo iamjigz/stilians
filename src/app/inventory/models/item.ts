@@ -20,6 +20,7 @@ export interface Stock {
 }
 
 export interface Stock {
+  ref?: string;
   name: string;
   total: number;
   items?: Item[];

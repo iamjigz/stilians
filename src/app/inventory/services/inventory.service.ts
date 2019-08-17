@@ -1,9 +1,13 @@
-import { InventoryPageStore } from './inventory-page.store';
-import { InventoryFirestore } from './inventory.firestore';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Item, Stock } from '../models/item';
 import { tap, map } from 'rxjs/operators';
+
+import { InventoryPageStore } from './inventory-page.store';
+import { InventoryFirestore } from './inventory.firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
+
+import { Item, Stock } from '../models/item';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +15,8 @@ import { tap, map } from 'rxjs/operators';
 export class InventoryService {
   constructor(
     private firestore: InventoryFirestore,
-    private store: InventoryPageStore
+    private store: InventoryPageStore,
+    private afs: AngularFirestore
   ) {
     this.firestore
       .collection$()
@@ -20,8 +25,7 @@ export class InventoryService {
           this.store.patch(
             {
               loading: false,
-              items,
-              stock: this.checkStock(items)
+              items
             },
             `[INVENTORY] collection subscription`
           );
@@ -30,32 +34,28 @@ export class InventoryService {
       .subscribe();
   }
 
-  private checkStock(items: Item[]) {
-    const key = {};
-    return items.reduce((arr, item) => {
-      if (key.hasOwnProperty(item.name)) {
-        arr[key[item.name]].total += Number(item.quantity);
-      } else {
-        key[item.name] = arr.length;
-        arr.push({
-          name: item.name,
-          price: item.retailPrice,
-          total: Number(item.quantity)
-        });
-      }
+  // private checkStock(items: Item[]) {
+  //   const key = {};
+  //   return items.reduce((arr, item) => {
+  //     if (key.hasOwnProperty(item.name)) {
+  //       arr[key[item.name]].total += Number(item.quantity);
+  //     } else {
+  //       key[item.name] = arr.length;
+  //       arr.push({
+  //         name: item.name,
+  //         price: item.retailPrice,
+  //         total: Number(item.quantity)
+  //       });
+  //     }
 
-      return arr;
-    }, []);
-  }
+  //     return arr;
+  //   }, []);
+  // }
 
   get items$(): Observable<Item[]> {
     return this.store.state$.pipe(
       map(state => (state.loading ? [] : state.items))
     );
-  }
-
-  get stock$(): Observable<Stock[]> {
-    return this.store.state$.pipe(map(state => state.stock));
   }
 
   get loading$(): Observable<boolean> {
@@ -74,7 +74,22 @@ export class InventoryService {
     return this.store.state$.pipe(map(state => state.formStatus));
   }
 
+  add(item: Item): Stock[] {
+    console.log(item.name);
+    let stock = [];
+    const stockQuery = this.afs
+      .collection<Stock>('stock', ref => ref.where('name', '==', item.name))
+      .get()
+      .subscribe(res => (stock = res.docs));
+
+    console.log(stock);
+    // stockQuery.unsubscribe();
+    return stock;
+  }
+
   create(item: Item) {
+    // this.add(item);
+
     this.store.patch(
       {
         loading: true,
@@ -83,6 +98,7 @@ export class InventoryService {
       },
       '[INVENTORY] create'
     );
+
     return this.firestore
       .create(item)
       .then(_ => {

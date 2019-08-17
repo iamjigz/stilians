@@ -47,7 +47,7 @@ export class TransactionsFormComponent implements OnInit {
     this.loading$ = this.inventory.loading$;
     this.noResults$ = this.inventory.noResults$;
     this.status$ = this.transactions.formStatus$;
-    this.inventory.stock$.subscribe(data => (this.stock = data));
+    // this.stock.stock$.subscribe(data => (this.stock = data));
 
     this.filteredStock$ = this.itemForm.get('search').valueChanges.pipe(
       startWith(''),
