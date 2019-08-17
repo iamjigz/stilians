@@ -17,41 +17,48 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        //TODO: ADD LIST OF ITEMS
-        <!-- 
-      <section fxLayout fxLayoutAlign="space-between end">
         <mat-list dense>
-          <h3 matSubheader>ID: {{ item.id }}</h3>
-          <mat-list-item> Name: {{ item.name }} </mat-list-item>
-          <mat-list-item> Generic: {{ item.genericName }} </mat-list-item>
-          <mat-list-item> Supplier: {{ item.supplier }} </mat-list-item>
+          <mat-list-item *ngFor="let item of stock.items">
+            <mat-icon matListIcon>label_important</mat-icon>
+            <span matLine>
+              <mat-grid-list cols="6">
+                <mat-grid-tile>
+                  Purchase Date:
+                  {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
+                </mat-grid-tile>
+                <mat-grid-tile>Supplier: {{ item.supplier }}</mat-grid-tile>
+                <mat-grid-tile>Name: {{ item.name }}</mat-grid-tile>
+                <mat-grid-tile>Quantity: {{ item.quantity }}</mat-grid-tile>
+                <mat-grid-tile
+                  >Purchase Price: PHP {{ item.purchasePrice }}</mat-grid-tile
+                >
+                <mat-grid-tile
+                  >Retail Price: PHP {{ item.retailPrice }}</mat-grid-tile
+                >
+              </mat-grid-list>
+            </span>
+
+            <mat-divider></mat-divider>
+          </mat-list-item>
         </mat-list>
-
-        <mat-list dense>
-          <mat-list-item> Quantity: {{ item.quantity }} </mat-list-item>
-          <mat-list-item>
-            Purchase Price: {{ item.purchasePrice }}
-          </mat-list-item>
-          <mat-list-item>
-            Purchase Date:
-            {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
-          </mat-list-item>
-          <mat-list-item> Retail Price: {{ item.retailPrice }} </mat-list-item>
-          <mat-list-item>
-            Expiry: {{ item.expiryDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
-          </mat-list-item>
-        </mat-list>
-      </section>
-
-      <mat-action-row fxLayoutGap="20px">
-        <button mat-raised-button color="warn" (click)="delete(item)">
-          Delete
-        </button>
-
-        <button mat-raised-button color="primary" (click)="update(item)">
-          Update
-        </button>
-      </mat-action-row> -->
+        <!-- <section *ngFor="let item of stock.items">
+          <mat-list dense fxLayout fxLayoutAlign="center space-around">
+            <mat-icon matListIcon>label_important</mat-icon>
+            <mat-list-item>
+              Purchase Date:
+              {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
+            </mat-list-item>
+            <mat-list-item> Supplier: {{ item.supplier }} </mat-list-item>
+            <mat-list-item>Name: {{ item.name }}</mat-list-item>
+            <mat-list-item> Quantity: {{ item.quantity }} </mat-list-item>
+            <mat-list-item>
+              Purchase Price: PHP {{ item.purchasePrice }}
+            </mat-list-item>
+            <mat-list-item>
+              Retail Price: PHP {{ item.retailPrice }}
+            </mat-list-item>
+          </mat-list>
+        </section> -->
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
