@@ -10,9 +10,7 @@
         <mat-card-title>
           Add New Transaction
         </mat-card-title>
-        <mat-card-subtitle>
-          {{ status$ | async }}
-        </mat-card-subtitle>
+        <mat-card-subtitle> </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div fxFlex fxLayout="column" fxLayoutGap="10px">
@@ -57,6 +55,7 @@
                   placeholder="Quantity"
                   id="quantity"
                   formControlName="quantity"
+                  [max]="selectedItem ? selectedItem.total : 10"
                 />
               </mat-form-field>
 
@@ -74,17 +73,21 @@
               <mat-list>
                 <h3 matSubheader>Purchases</h3>
                 <mat-list-item *ngFor="let order of orders">
-                  <mat-icon matListIcon>folder</mat-icon>
+                  <mat-icon matListIcon>delete</mat-icon>
                   <h4 matLine>{{ order.name }}</h4>
-                  <p matLine class="demo-2">{{ order.quantity }}</p>
+                  <p matLine>{{ order.quantity }} pcs.</p>
+                  <p>{{ (order.price * order.quantity).toFixed(2) }}</p>
                 </mat-list-item>
+
                 <mat-divider></mat-divider>
-                <h3 matSubheader>Notes</h3>
-                <!-- <mat-list-item *ngFor="let note of notes">
-                       <mat-icon matListIcon>note</mat-icon>
-                       <h4 matLine>{{note.name}}</h4>
-                       <p matLine class="demo-2"> {{note.updated}} </p>
-                    </mat-list-item> -->
+
+                <h3 matSubheader fxLayoutAlign="center end">
+                  Subtotal
+                  <span fxFlex></span>
+                  {{ sum(orders).toFixed(2) }}
+                </h3>
+
+                <pre> {{ aggregate(orders) }}</pre>
               </mat-list>
             </div>
           </form>
@@ -129,9 +132,7 @@
 
       <mat-card-footer>
         <!-- <mat-error *ngIf="form.invalid">{{  }}</mat-error> -->
-        <mat-error *ngIf="transactionForm.invalid">{{
-          status$ | async
-        }}</mat-error>
+        <mat-error *ngIf="transactionForm.invalid"></mat-error>
       </mat-card-footer>
     </mat-card>
   </form>

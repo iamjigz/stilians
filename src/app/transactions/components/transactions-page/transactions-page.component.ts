@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StockService } from 'src/app/inventory/services/stock.service';
 
 @Component({
   selector: 'app-transactions-page',
@@ -6,10 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./transactions-page.component.css']
 })
 export class TransactionsPageComponent implements OnInit {
+  constructor(public stock: StockService) {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

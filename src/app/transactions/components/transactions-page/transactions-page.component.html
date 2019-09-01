@@ -7,29 +7,10 @@
     </div>
   </div>
 
-  <!-- <section>
-    <div fxLayoutAlign="center center">
-      <mat-spinner
-        *ngIf="loading$ | async"
-        [style.display]="'block'"
-      ></mat-spinner>
-    </div>
-
-    <div *ngIf="noResults$ | async">
-      No results
-    </div>
-  </section> -->
-
   <section>
     <div fxLayout="column" fxLayoutGap="20px">
-      <!-- <div class="col-6">
-            <app-inventory-list [data]="stock$"></app-inventory-list>
-          </div>
-          <div class="col-6">
-            <app-inventory-table [data]="items$"></app-inventory-table>
-          </div> -->
       <div class="col-6">
-        <app-transactions-form></app-transactions-form>
+        <app-transactions-form [data]="stock.stock$"></app-transactions-form>
       </div>
     </div>
   </section>

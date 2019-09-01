@@ -12,8 +12,8 @@
         <mat-expansion-panel-header class="right-aligned-header">
           <mat-panel-title> {{ stock.name }} </mat-panel-title>
           <mat-panel-description>
-            <span>Price: PHP {{ stock.price }}</span>
-            <small>Stock: {{ stock.total }}</small>
+            <span>Stock: {{ stock.total }} </span>
+            <small>Price: PHP {{ stock.price }}</small>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -29,36 +29,18 @@
                 <mat-grid-tile>Supplier: {{ item.supplier }}</mat-grid-tile>
                 <mat-grid-tile>Name: {{ item.name }}</mat-grid-tile>
                 <mat-grid-tile>Quantity: {{ item.quantity }}</mat-grid-tile>
+                <mat-grid-tile>
+                  Purchase Price: PHP {{ item.purchasePrice }}
+                </mat-grid-tile>
                 <mat-grid-tile
-                  >Purchase Price: PHP {{ item.purchasePrice }}</mat-grid-tile
-                >
-                <mat-grid-tile
-                  >Retail Price: PHP {{ item.retailPrice }}</mat-grid-tile
-                >
+                  >Retail Price: PHP {{ item.retailPrice }}
+                </mat-grid-tile>
               </mat-grid-list>
             </span>
 
             <mat-divider></mat-divider>
           </mat-list-item>
         </mat-list>
-        <!-- <section *ngFor="let item of stock.items">
-          <mat-list dense fxLayout fxLayoutAlign="center space-around">
-            <mat-icon matListIcon>label_important</mat-icon>
-            <mat-list-item>
-              Purchase Date:
-              {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
-            </mat-list-item>
-            <mat-list-item> Supplier: {{ item.supplier }} </mat-list-item>
-            <mat-list-item>Name: {{ item.name }}</mat-list-item>
-            <mat-list-item> Quantity: {{ item.quantity }} </mat-list-item>
-            <mat-list-item>
-              Purchase Price: PHP {{ item.purchasePrice }}
-            </mat-list-item>
-            <mat-list-item>
-              Retail Price: PHP {{ item.retailPrice }}
-            </mat-list-item>
-          </mat-list>
-        </section> -->
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
