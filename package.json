@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "functions": "firebase deploy --only functions",
+    "emulator": "firebase emulators:start --only functions"
   },
   "private": true,
   "dependencies": {

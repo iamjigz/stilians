@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TransactionsService } from './../../services/transactions.service';
-import { InventoryService } from '../../../inventory/services/inventory.service';
+import { StockService } from '../../../inventory/services/stock.service';
 import { Observable } from 'rxjs';
-import { Stock } from 'src/app/inventory/models/item';
+import { Stock, Item } from 'src/app/inventory/models/item';
 import { startWith, map } from 'rxjs/operators';
 import { Order, Transaction } from '../../models/transaction';
 import { MatOption } from '@angular/material';
@@ -41,7 +41,10 @@ export class TransactionsFormComponent implements OnInit {
 
   discount = false;
 
-  constructor(private transactions: TransactionsService) {}
+  constructor(
+    private transactions: TransactionsService,
+    private stockService: StockService
+  ) {}
 
   ngOnInit() {
     this.data.subscribe(data => (this.stock = data));
@@ -77,6 +80,12 @@ export class TransactionsFormComponent implements OnInit {
   async submit() {
     this.transactionForm.disable();
     await this.transactions.create({ ...this.transaction });
+    this.orders.map(order => {
+      this.stockService.deduct(order);
+    });
+
+    this.orders = [];
+    this.transaction = undefined;
     this.transactionForm.reset();
     this.transactionForm.enable();
   }
