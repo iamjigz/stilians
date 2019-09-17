@@ -27,24 +27,6 @@ export class StockService {
       .subscribe();
   }
 
-  // private checkStock(items: Item[]) {
-  //   const key = {};
-  //   return items.reduce((arr, item) => {
-  //     if (key.hasOwnProperty(item.name)) {
-  //       arr[key[item.name]].total += Number(item.quantity);
-  //     } else {
-  //       key[item.name] = arr.length;
-  //       arr.push({
-  //         name: item.name,
-  //         price: item.retailPrice,
-  //         total: Number(item.quantity)
-  //       });
-  //     }
-
-  //     return arr;
-  //   }, []);
-  // }
-
   get stock$(): Observable<Stock[]> {
     return this.store.state$.pipe(map(state => state.stocks));
   }
@@ -120,7 +102,6 @@ export class StockService {
     );
 
     const stock = await this.findStock(item);
-    console.log(stock);
 
     if (stock.length === 0) {
       this.create({
@@ -129,29 +110,11 @@ export class StockService {
         price: item.retailPrice
       });
     } else {
-      console.log('Stock found');
       this.firestore.update(stock[0].ref, {
         name: stock[0].name,
         price: stock[0].price,
         total: stock[0].total + item.quantity
       });
     }
-    // stock.subscribe((data: Stock[]) => {
-    //   console.log('No stock found');
-    //   if (data.length === 0) {
-    //     this.create({
-    //       name: item.name,
-    //       total: item.quantity,
-    //       price: item.retailPrice
-    //     });
-    //   } else {
-    //     console.log('Stock found');
-    //     this.firestore.update(data[0].ref, {
-    //       name: data[0].name,
-    //       price: data[0].price,
-    //       total: data[0].total + item.quantity
-    //     });
-    //   }
-    // });
   }
 }

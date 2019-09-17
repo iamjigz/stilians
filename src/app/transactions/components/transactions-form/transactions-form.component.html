@@ -55,6 +55,7 @@
                   placeholder="Quantity"
                   id="quantity"
                   formControlName="quantity"
+                  min="1"
                   [max]="selectedItem ? selectedItem.total : 10"
                 />
               </mat-form-field>
@@ -70,24 +71,50 @@
             </div>
 
             <div fxLayoutGap="10px">
-              <mat-list>
+              <mat-list *ngIf="orders.length > 0">
                 <h3 matSubheader>Purchases</h3>
                 <mat-list-item *ngFor="let order of orders">
                   <mat-icon matListIcon>delete</mat-icon>
                   <h4 matLine>{{ order.name }}</h4>
-                  <p matLine>{{ order.quantity }} pcs.</p>
+                  <p matLine>
+                    {{ order.quantity }} pcs. | {{ order.price }} ea
+                  </p>
                   <p>{{ (order.price * order.quantity).toFixed(2) }}</p>
                 </mat-list-item>
 
                 <mat-divider></mat-divider>
 
-                <h3 matSubheader fxLayoutAlign="center end">
-                  Subtotal
-                  <span fxFlex></span>
-                  {{ sum(orders).toFixed(2) }}
-                </h3>
+                <section *ngIf="transaction">
+                  <h3 matSubheader fxLayoutAlign="center end">
+                    Subtotal
+                    <span fxFlex></span>
+                    {{ transaction.subtotal.toFixed(2) }}
+                  </h3>
 
-                <pre> {{ aggregate(orders) }}</pre>
+                  <h3 matSubheader fxLayoutAlign="center end">
+                    Tax (10%)
+                    <span fxFlex></span>
+                    {{ transaction.tax.toFixed(2) }}
+                  </h3>
+
+                  <h3 matSubheader fxLayoutAlign="center end">
+                    <mat-slide-toggle
+                      [checked]="discount"
+                      (toggleChange)="onDiscountChange()"
+                      >Discount (10%)</mat-slide-toggle
+                    >
+                    <span fxFlex></span>
+                    {{ transaction.discount.toFixed(2) }}
+                  </h3>
+
+                  <mat-divider></mat-divider>
+
+                  <h3 matSubheader fxLayoutAlign="center end">
+                    Total
+                    <span fxFlex></span>
+                    {{ transaction.total.toFixed(2) }}
+                  </h3>
+                </section>
               </mat-list>
             </div>
           </form>
@@ -115,7 +142,13 @@
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="outline">
-            <input type="text" placeholder="User" matInput />
+            <input
+              type="text"
+              placeholder="User"
+              matInput
+              id="user"
+              formControlName="user"
+            />
           </mat-form-field>
         </div>
 
@@ -124,7 +157,7 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="!transactionForm.valid"
+          [disabled]="transaction === undefined"
         >
           Submit
         </button>

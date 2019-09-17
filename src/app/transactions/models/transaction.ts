@@ -5,7 +5,7 @@ export interface Order {
 }
 
 export interface Transaction {
-  transid?: string;
+  ref?: string;
   orders: Order[];
   subtotal: number;
   discount: number;

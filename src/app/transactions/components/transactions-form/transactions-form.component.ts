@@ -22,7 +22,8 @@ export class TransactionsFormComponent implements OnInit {
     discount: new FormControl('', Validators.required),
     tax: new FormControl('', Validators.required),
     total: new FormControl('', Validators.required),
-    timestamp: new FormControl(new Date(), Validators.required)
+    timestamp: new FormControl(new Date(), Validators.required),
+    user: new FormControl('', Validators.required)
   });
 
   itemForm: FormGroup = new FormGroup({
@@ -36,6 +37,9 @@ export class TransactionsFormComponent implements OnInit {
 
   selectedItem: Stock;
   orders: Order[] = [];
+  transaction: Transaction;
+
+  discount = false;
 
   constructor(private transactions: TransactionsService) {}
 
@@ -72,7 +76,7 @@ export class TransactionsFormComponent implements OnInit {
 
   async submit() {
     this.transactionForm.disable();
-    await this.transactions.create({ ...this.transactionForm.value });
+    await this.transactions.create({ ...this.transaction });
     this.transactionForm.reset();
     this.transactionForm.enable();
   }
@@ -92,6 +96,7 @@ export class TransactionsFormComponent implements OnInit {
     this.orders.push(order);
     this.itemForm.reset();
     this.selectedItem = null;
+    this.aggregate(this.orders);
   }
 
   sum(orders: Order[]) {
@@ -106,14 +111,22 @@ export class TransactionsFormComponent implements OnInit {
 
   aggregate(orders: Order[]) {
     const transaction: Transaction = {
-      transid: '',
       orders,
       subtotal: this.sum(orders),
-      discount: 0,
-      tax: 0,
-      total: 0
+      discount: this.discount ? this.sum(orders) * -0.1 : 0,
+      tax: this.sum(orders) * 0.1,
+      total:
+        this.sum(orders) +
+        (this.discount ? this.sum(orders) * -0.1 : 0) +
+        this.sum(orders) * 0.1,
+      timestamp: this.transactionForm.get('timestamp').value
     };
 
-    console.log(transaction);
+    return (this.transaction = transaction);
+  }
+
+  onDiscountChange() {
+    this.discount = !this.discount;
+    return this.aggregate(this.orders);
   }
 }

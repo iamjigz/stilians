@@ -34,24 +34,6 @@ export class InventoryService {
       .subscribe();
   }
 
-  // private checkStock(items: Item[]) {
-  //   const key = {};
-  //   return items.reduce((arr, item) => {
-  //     if (key.hasOwnProperty(item.name)) {
-  //       arr[key[item.name]].total += Number(item.quantity);
-  //     } else {
-  //       key[item.name] = arr.length;
-  //       arr.push({
-  //         name: item.name,
-  //         price: item.retailPrice,
-  //         total: Number(item.quantity)
-  //       });
-  //     }
-
-  //     return arr;
-  //   }, []);
-  // }
-
   get items$(): Observable<Item[]> {
     return this.store.state$.pipe(
       map(state => (state.loading ? [] : state.items))
@@ -75,21 +57,17 @@ export class InventoryService {
   }
 
   add(item: Item): Stock[] {
-    console.log(item.name);
     let stock = [];
-    const stockQuery = this.afs
+
+    this.afs
       .collection<Stock>('stock', ref => ref.where('name', '==', item.name))
       .get()
       .subscribe(res => (stock = res.docs));
 
-    console.log(stock);
-    // stockQuery.unsubscribe();
     return stock;
   }
 
   create(item: Item) {
-    // this.add(item);
-
     this.store.patch(
       {
         loading: true,
