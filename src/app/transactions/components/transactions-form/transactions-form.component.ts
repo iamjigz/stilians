@@ -1,5 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormGroupDirective,
+  AbstractControl
+} from '@angular/forms';
 import { TransactionsService } from './../../services/transactions.service';
 import { StockService } from '../../../inventory/services/stock.service';
 import { Observable } from 'rxjs';
@@ -77,7 +83,7 @@ export class TransactionsFormComponent implements OnInit {
     );
   }
 
-  async submit() {
+  async submit(formGroup: FormGroup, formDirective: FormGroupDirective) {
     this.transactionForm.disable();
     await this.transactions.create({ ...this.transaction });
     this.orders.map(order => {
@@ -86,15 +92,24 @@ export class TransactionsFormComponent implements OnInit {
 
     this.orders = [];
     this.transaction = undefined;
-    this.transactionForm.reset();
     this.transactionForm.enable();
+    this.resetForm(formGroup, formDirective);
   }
 
   displayFn(): string | undefined {
     return this.selectedItem ? this.selectedItem.name : '';
   }
 
-  add() {
+  resetForm(formGroup: FormGroup, formDirective: FormGroupDirective): void {
+    formDirective.resetForm();
+    formGroup.reset();
+  }
+
+  add(formGroup: FormGroup, formDirective: FormGroupDirective): void {
+    if (formGroup.invalid) {
+      return;
+    }
+
     const formValue = this.itemForm.value;
     const order: Order = {
       name: formValue.search.name,
@@ -103,9 +118,9 @@ export class TransactionsFormComponent implements OnInit {
     };
 
     this.orders.push(order);
-    this.itemForm.reset();
     this.selectedItem = null;
     this.aggregate(this.orders);
+    this.resetForm(formGroup, formDirective);
   }
 
   sum(orders: Order[]) {

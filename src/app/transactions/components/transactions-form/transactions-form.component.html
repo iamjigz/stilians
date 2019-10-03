@@ -1,7 +1,8 @@
 <main fxLayout="column" fxLayoutGap="30px">
   <form
     [(formGroup)]="transactionForm"
-    (ngSubmit)="submit()"
+    #transactionDirective="ngForm"
+    (ngSubmit)="submit(transactionForm, transactionDirective)"
     fxLayout="column"
     fxLayoutGap="10px"
   >
@@ -15,10 +16,11 @@
       <mat-card-content>
         <div fxFlex fxLayout="column" fxLayoutGap="10px">
           <form
-            [formGroup]="itemForm"
+            [(formGroup)]="itemForm"
+            #itemDirective="ngForm"
             fxLayout="column"
             fxLayoutGap="10px"
-            (ngSubmit)="add()"
+            (ngSubmit)="add(itemForm, itemDirective)"
           >
             <div fxLayout fxLayoutGap="10px">
               <mat-form-field fxFlex appearance="standard">
@@ -68,18 +70,38 @@
               >
                 Add
               </button>
+
+              <button
+                mat-raised-button
+                color="accent"
+                type="reset"
+                (click)="resetForm(itemForm, itemDirective)"
+              >
+                Reset
+              </button>
             </div>
 
             <div fxLayoutGap="10px">
               <mat-list *ngIf="orders.length > 0">
                 <h3 matSubheader>Purchases</h3>
-                <mat-list-item *ngFor="let order of orders">
-                  <mat-icon matListIcon>delete</mat-icon>
+                <mat-list-item *ngFor="let order of orders; let i = index">
+                  <mat-icon matListIcon color="accent"
+                    >label_important</mat-icon
+                  >
+
                   <h4 matLine>{{ order.name }}</h4>
                   <p matLine>
                     {{ order.quantity }} pcs. | {{ order.price }} ea
                   </p>
                   <p>{{ (order.price * order.quantity).toFixed(2) }}</p>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="orders.splice(i, 1)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </mat-list-item>
 
                 <mat-divider></mat-divider>
@@ -160,6 +182,15 @@
           [disabled]="transaction === undefined"
         >
           Submit
+        </button>
+
+        <button
+          mat-raised-button
+          color="accent"
+          type="reset"
+          (click)="resetForm(transactionForm, transactionDirective)"
+        >
+          Cancel
         </button>
       </mat-card-actions>
 
