@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 // Modules
 import { MaterialModule } from './core/modules/material.module';
 import { CoreModule } from './core/modules/core.module';
+import { HomeModule } from './home/home.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { TransactionsModule } from './transactions/transactions.module';
 
@@ -24,6 +25,7 @@ import { CurrencyPipe } from '@angular/common';
     MaterialModule,
     BrowserAnimationsModule,
     CoreModule,
+    HomeModule,
     InventoryModule,
     TransactionsModule
   ],

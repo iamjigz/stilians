@@ -14,6 +14,7 @@ import { TransactionsFormComponent } from './components/transactions-form/transa
     TransactionsRoutingModule,
     ReactiveFormsModule,
     CoreModule
-  ]
+  ],
+  exports: [TransactionsPageComponent, TransactionsFormComponent]
 })
 export class TransactionsModule {}

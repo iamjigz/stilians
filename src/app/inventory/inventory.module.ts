@@ -21,6 +21,7 @@ import { InventoryTableComponent } from './components/inventory-table/inventory-
     InventoryRoutingModule,
     ReactiveFormsModule,
     CoreModule
-  ]
+  ],
+  exports: [InventoryPageComponent, InventoryListComponent]
 })
 export class InventoryModule {}

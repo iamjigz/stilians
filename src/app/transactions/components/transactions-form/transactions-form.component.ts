@@ -3,13 +3,12 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  FormGroupDirective,
-  AbstractControl
+  FormGroupDirective
 } from '@angular/forms';
 import { TransactionsService } from './../../services/transactions.service';
 import { StockService } from '../../../inventory/services/stock.service';
 import { Observable } from 'rxjs';
-import { Stock, Item } from 'src/app/inventory/models/item';
+import { Stock } from 'src/app/inventory/models/item';
 import { startWith, map } from 'rxjs/operators';
 import { Order, Transaction } from '../../models/transaction';
 import { MatOption } from '@angular/material';
