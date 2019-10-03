@@ -104,8 +104,7 @@ export class StockService {
   async deduct(item: Item | Order) {
     this.store.patch(
       {
-        loading: true,
-        stocks: []
+        loading: true
       },
       '[STOCK] deduct'
     );
