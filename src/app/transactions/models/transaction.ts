@@ -4,12 +4,12 @@ export interface Order {
   price: number;
 }
 
-export interface Transaction extends Order {
-  transid: string;
+export interface Transaction {
+  ref?: string;
   orders: Order[];
   subtotal: number;
   discount: number;
   tax: number;
   total: number;
-  timestamp: Date | string;
+  timestamp?: Date | string;
 }

@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormGroupDirective
+} from '@angular/forms';
 import { TransactionsService } from './../../services/transactions.service';
-import { InventoryService } from '../../../inventory/services/inventory.service';
+import { StockService } from '../../../inventory/services/stock.service';
 import { Observable } from 'rxjs';
 import { Stock } from 'src/app/inventory/models/item';
 import { startWith, map } from 'rxjs/operators';
-import { Order } from '../../models/transaction';
+import { Order, Transaction } from '../../models/transaction';
 import { MatOption } from '@angular/material';
 
 @Component({
@@ -14,13 +19,16 @@ import { MatOption } from '@angular/material';
   styleUrls: ['./transactions-form.component.css']
 })
 export class TransactionsFormComponent implements OnInit {
+  @Input() data: Observable<Stock[]>;
+
   transactionForm: FormGroup = new FormGroup({
     orders: new FormControl([], Validators.required),
     subtotal: new FormControl('', Validators.required),
     discount: new FormControl('', Validators.required),
     tax: new FormControl('', Validators.required),
     total: new FormControl('', Validators.required),
-    timestamp: new FormControl(new Date(), Validators.required)
+    timestamp: new FormControl(new Date(), Validators.required),
+    user: new FormControl('', Validators.required)
   });
 
   itemForm: FormGroup = new FormGroup({
@@ -28,26 +36,23 @@ export class TransactionsFormComponent implements OnInit {
     quantity: new FormControl('', Validators.required)
   });
 
-  loading$: Observable<boolean>;
-  noResults$: Observable<boolean>;
-  status$: Observable<string>;
   formattedAmount: string;
   stock: Stock[];
   filteredStock$: Observable<Stock[]>;
 
   selectedItem: Stock;
   orders: Order[] = [];
+  transaction: Transaction;
+
+  discount = false;
 
   constructor(
     private transactions: TransactionsService,
-    private inventory: InventoryService
+    private stockService: StockService
   ) {}
 
   ngOnInit() {
-    this.loading$ = this.inventory.loading$;
-    this.noResults$ = this.inventory.noResults$;
-    this.status$ = this.transactions.formStatus$;
-    // this.stock.stock$.subscribe(data => (this.stock = data));
+    this.data.subscribe(data => (this.stock = data));
 
     this.filteredStock$ = this.itemForm.get('search').valueChanges.pipe(
       startWith(''),
@@ -55,11 +60,18 @@ export class TransactionsFormComponent implements OnInit {
     );
   }
 
-  private _filter(value: Stock) {
-    const filterValue = value.name ? value.name.toLowerCase() : '';
+  private _filter(search: string): Stock[] {
+    if (typeof search === 'object') {
+      return [];
+    }
+
     return this.stock.filter(stock =>
-      stock.name.toLowerCase().includes(filterValue)
+      stock.name.toLowerCase().includes(search.toLowerCase())
     );
+  }
+
+  onSelectedItem(option: MatOption) {
+    this.selectedItem = option.value;
   }
 
   isInvalid(name: string | number) {
@@ -70,28 +82,33 @@ export class TransactionsFormComponent implements OnInit {
     );
   }
 
-  transformDecimal(name: string) {
-    const amount: number = this.transactionForm.get(name).value;
-    this.transactionForm.controls[name].patchValue(amount.toFixed(2));
-  }
-
-  async submit() {
+  async submit(formGroup: FormGroup, formDirective: FormGroupDirective) {
     this.transactionForm.disable();
-    await this.transactions.create({ ...this.transactionForm.value });
-    this.transactionForm.reset();
+    await this.transactions.create({ ...this.transaction });
+    this.orders.map(order => {
+      this.stockService.deduct(order);
+    });
+
+    this.orders = [];
+    this.transaction = undefined;
+    this.resetForm(formGroup, formDirective);
     this.transactionForm.enable();
   }
 
   displayFn(): string | undefined {
-    return this.selectedItem ? this.selectedItem.name : undefined;
+    return this.selectedItem ? this.selectedItem.name : '';
   }
 
-  onSelectedItem(option: MatOption) {
-    this.selectedItem = option.value;
+  resetForm(formGroup: FormGroup, formDirective: FormGroupDirective): void {
+    formDirective.resetForm();
+    formGroup.reset();
   }
 
-  add() {
-    console.log(this.itemForm.value);
+  add(formGroup: FormGroup, formDirective: FormGroupDirective): void {
+    if (formGroup.invalid) {
+      return;
+    }
+
     const formValue = this.itemForm.value;
     const order: Order = {
       name: formValue.search.name,
@@ -99,8 +116,40 @@ export class TransactionsFormComponent implements OnInit {
       price: formValue.search.price
     };
 
-    console.log(order);
     this.orders.push(order);
-    this.itemForm.reset();
+    this.selectedItem = null;
+    this.aggregate(this.orders);
+    this.resetForm(formGroup, formDirective);
+  }
+
+  sum(orders: Order[]) {
+    if (orders == null) {
+      return 0;
+    }
+
+    return orders.reduce((prev, curr) => {
+      return prev == null ? prev : prev + curr.price * curr.quantity;
+    }, 0);
+  }
+
+  aggregate(orders: Order[]) {
+    const transaction: Transaction = {
+      orders,
+      subtotal: this.sum(orders),
+      discount: this.discount ? this.sum(orders) * -0.1 : 0,
+      tax: this.sum(orders) * 0.1,
+      total:
+        this.sum(orders) +
+        (this.discount ? this.sum(orders) * -0.1 : 0) +
+        this.sum(orders) * 0.1,
+      timestamp: this.transactionForm.get('timestamp').value
+    };
+
+    return (this.transaction = transaction);
+  }
+
+  onDiscountChange() {
+    this.discount = !this.discount;
+    return this.aggregate(this.orders);
   }
 }

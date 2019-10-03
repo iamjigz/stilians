@@ -3,8 +3,10 @@ import { StockFirestore } from './stock.firestore';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap, map, filter } from 'rxjs/operators';
+
 import { Stock, Item } from '../models/item';
-import { tap, map } from 'rxjs/operators';
+import { Order } from 'src/app/transactions/models/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -26,24 +28,6 @@ export class StockService {
       )
       .subscribe();
   }
-
-  // private checkStock(items: Item[]) {
-  //   const key = {};
-  //   return items.reduce((arr, item) => {
-  //     if (key.hasOwnProperty(item.name)) {
-  //       arr[key[item.name]].total += Number(item.quantity);
-  //     } else {
-  //       key[item.name] = arr.length;
-  //       arr.push({
-  //         name: item.name,
-  //         price: item.retailPrice,
-  //         total: Number(item.quantity)
-  //       });
-  //     }
-
-  //     return arr;
-  //   }, []);
-  // }
 
   get stock$(): Observable<Stock[]> {
     return this.store.state$.pipe(map(state => state.stocks));
@@ -100,58 +84,41 @@ export class StockService {
       });
   }
 
-  private async findStock(item: Item) {
+  private async findStock(item: Item | Order) {
     let result = [];
-    const obs = this.firestore.collection$(ref =>
-      ref.where('name', '==', item.name)
-    );
 
-    await obs.subscribe(data => (result = data));
+    const filtered = this.firestore
+      .collection$()
+      .pipe(
+        tap(stocks => {
+          console.log(stocks);
+          result = [...stocks];
+        })
+      )
+      .subscribe();
+
+    console.log(result);
     return result;
   }
 
-  async update(item: Item) {
+  async deduct(item: Item | Order) {
     this.store.patch(
       {
-        loading: true,
-        stocks: []
+        loading: true
       },
-      '[STOCK] update'
+      '[STOCK] deduct'
     );
 
-    const stock = await this.findStock(item);
-    console.log(stock);
+    const filtered = this.findStock(item);
 
-    if (stock.length === 0) {
-      this.create({
-        name: item.name,
-        total: item.quantity,
-        price: item.retailPrice
-      });
-    } else {
-      console.log('Stock found');
-      this.firestore.update(stock[0].ref, {
-        name: stock[0].name,
-        price: stock[0].price,
-        total: stock[0].total + item.quantity
-      });
-    }
-    // stock.subscribe((data: Stock[]) => {
-    //   console.log('No stock found');
-    //   if (data.length === 0) {
-    //     this.create({
-    //       name: item.name,
-    //       total: item.quantity,
-    //       price: item.retailPrice
-    //     });
-    //   } else {
-    //     console.log('Stock found');
-    //     this.firestore.update(data[0].ref, {
-    //       name: data[0].name,
-    //       price: data[0].price,
-    //       total: data[0].total + item.quantity
-    //     });
-    //   }
-    // });
+    console.log(filtered);
+
+    // if (stock.length > 0) {
+    //   this.firestore.update(stock[0].ref, {
+    //     name: stock[0].name,
+    //     price: stock[0].price,
+    //     total: stock[0].total - item.quantity
+    //   });
+    // }
   }
 }

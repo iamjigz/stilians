@@ -4,7 +4,7 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-exports.aggregateStock = functions.firestore
+exports.onInventoryAdd = functions.firestore
   .document('inventory/{ref}')
   .onCreate((snap, context) => {
     const newItem = snap.data();
@@ -36,4 +36,59 @@ exports.aggregateStock = functions.firestore
         return stockRef.doc(stockData.id).set(stockData, { merge: true })
       })
       .catch(err => console.error('Error', err))
+  });
+
+
+exports.onInventoryDelete = functions.firestore
+  .document('inventory/{ref}')
+  .onDelete((snap, context) => {
+    const toDelete = snap.data();
+    const stockRef = db.collection('stock');
+
+    return stockRef
+      .where('name', '==', toDelete.name)
+      .get()
+      .then(snapshot => {
+        const snapData = (snapshot.empty) ? '' : snapshot.docs.map(doc => doc.data())[0];
+        let stockData = {};
+
+        if (snapData.total - toDelete.quantity === 0) {
+          return stockRef.doc(snapData.id).delete()
+        }
+
+        if (snapData.hasOwnProperty('items') && snapData.items.length >= 0) {
+          stockData = {
+            total: (snapshot.empty) ? toDelete.quantity : snapData.total - toDelete.quantity,
+            items: snapData.items.filter(item => item.ref !== toDelete.ref)
+          }
+        } else {
+          return stockRef.doc(snapData.id).delete()
+        }
+
+        return stockRef.doc(snapData.id).set(stockData, { merge: true })
+      })
+      .catch(err => console.error('Error', err))
+  });
+
+exports.onTransactionAdd = functions.firestore
+  .document('transactions/{ref}')
+  .onCreate((snap, context) => {
+    const newItem = snap.data();
+    const stockRef = db.collection('stock');
+
+    return newItem.orders.map(order => {
+      return stockRef
+        .where('name', '==', order.name)
+        .get()
+        .then(snapshot => {
+          const snapData = (snapshot.empty) ? '' : snapshot.docs.map(doc => doc.data())[0];
+
+          let stockData = {
+            total: (snapshot.empty) ? order.quantity : snapData.total - order.quantity,
+          }
+
+          return stockRef.doc(snapData.id).set(stockData, { merge: true })
+        })
+        .catch(err => console.error('Error', err))
+    })
   });

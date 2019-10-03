@@ -1,7 +1,8 @@
 <main fxLayout="column" fxLayoutGap="30px">
   <form
     [(formGroup)]="form"
-    (ngSubmit)="submit()"
+    #directive="ngForm"
+    (ngSubmit)="submit(form, directive)"
     fxLayout="column"
     fxLayoutGap="10px"
   >
@@ -24,9 +25,10 @@
               placeholder="ID"
               id="id"
               formControlName="id"
+              (blur)="transformUpper('id')"
               [class.is-invalid]="isInvalid('id')"
             />
-            <mat-icon matPrefix>label_important</mat-icon>
+            <mat-icon matPrefix color="accent">label_important</mat-icon>
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="outline">
@@ -37,9 +39,10 @@
               placeholder="Name"
               id="name"
               formControlName="name"
+              (blur)="transformUpper('name')"
               [class.is-invalid]="isInvalid('name')"
             />
-            <mat-icon matPrefix>label_important</mat-icon>
+            <mat-icon matPrefix color="accent">label_important</mat-icon>
           </mat-form-field>
         </div>
 
@@ -52,9 +55,10 @@
               placeholder="Supplier"
               id="supplier"
               formControlName="supplier"
+              (blur)="transformUpper('supplier')"
               [class.is-invalid]="isInvalid('supplier')"
             />
-            <mat-icon matPrefix>label_important</mat-icon>
+            <mat-icon matPrefix color="accent">label_important</mat-icon>
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="outline">
@@ -65,9 +69,10 @@
               placeholder="Generic Name"
               id="genericName"
               formControlName="genericName"
+              (blur)="transformUpper('genericName')"
               [class.is-invalid]="isInvalid('genericName')"
             />
-            <mat-icon matPrefix>label_important</mat-icon>
+            <mat-icon matPrefix color="accent">label_important</mat-icon>
           </mat-form-field>
         </div>
 
@@ -79,12 +84,13 @@
               matInput
               placeholder="Quantity"
               type="number"
+              min="1"
               id="quantity"
               formControlName="quantity"
               (blur)="getTotalPurchase()"
               [class.is-invalid]="isInvalid('quantity')"
             />
-            <mat-icon matPrefix>label_important</mat-icon>
+            <mat-icon matPrefix color="accent">label_important</mat-icon>
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="outline">
@@ -102,7 +108,7 @@
               matPrefix
               [for]="expiryDate"
             ></mat-datepicker-toggle>
-            <mat-datepicker #expiryDate></mat-datepicker>
+            <mat-datepicker color="accent" #expiryDate></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field fxFlex appearance="outline">
@@ -174,15 +180,23 @@
         </div>
       </mat-card-content>
 
-      <mat-card-actions fxLayout fxLayoutGap="10px">
+      <mat-card-actions fxLayout="column" fxLayoutGap="10px">
         <button
-          fxFlex
           mat-raised-button
           color="primary"
           type="submit"
           [disabled]="!form.valid"
         >
           Add
+        </button>
+
+        <button
+          mat-raised-button
+          color="accent"
+          type="reset"
+          (click)="resetForm(form, directive)"
+        >
+          Cancel
         </button>
       </mat-card-actions>
 

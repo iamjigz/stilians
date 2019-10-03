@@ -10,13 +10,6 @@
   <section>
     <div fxLayout="column" fxLayoutGap="20px">
       <div class="col-6">
-        <div fxLayoutAlign="center center">
-          <mat-spinner
-            *ngIf="stock.loading$ | async"
-            [style.display]="'block'"
-          ></mat-spinner>
-        </div>
-
         <div *ngIf="stock.noResults$ | async">
           No stocks found.
         </div>
@@ -24,13 +17,6 @@
         <app-inventory-list [data]="stock.stock$"></app-inventory-list>
       </div>
       <div class="col-6">
-        <div fxLayoutAlign="center center">
-          <mat-spinner
-            *ngIf="inventory.loading$ | async"
-            [style.display]="'block'"
-          ></mat-spinner>
-        </div>
-
         <div *ngIf="inventory.noResults$ | async">
           No results found.
         </div>
