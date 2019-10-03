@@ -92,8 +92,8 @@ export class TransactionsFormComponent implements OnInit {
 
     this.orders = [];
     this.transaction = undefined;
-    this.transactionForm.enable();
     this.resetForm(formGroup, formDirective);
+    this.transactionForm.enable();
   }
 
   displayFn(): string | undefined {

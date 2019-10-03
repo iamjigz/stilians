@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { InventoryService } from '../../services/inventory.service';
 import { Item, Stock } from '../../models/item';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inventory-list',
@@ -16,7 +17,9 @@ export class InventoryListComponent implements OnInit {
   constructor(private inventory: InventoryService) {}
 
   ngOnInit() {
-    this.stock$ = this.data;
+    this.stock$ = this.data.pipe(
+      map((stock: any) => stock.sort((prev, curr) => prev.total - curr.total))
+    );
   }
 
   delete(item: Item) {

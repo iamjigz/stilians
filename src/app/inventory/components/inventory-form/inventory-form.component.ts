@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormGroupDirective
+} from '@angular/forms';
 import { InventoryService } from './../../services/inventory.service';
 import { Observable } from 'rxjs';
 
@@ -38,7 +43,9 @@ export class InventoryFormComponent implements OnInit {
   }
 
   transformDecimal(name: string) {
-    const amount: number = this.form.get(name).value;
+    const value =
+      this.form.get(name).value === '' ? 0 : this.form.get(name).value;
+    const amount = isNaN(value) ? 0 : value;
     this.form.controls[name].patchValue(amount.toFixed(2));
   }
 
@@ -51,12 +58,15 @@ export class InventoryFormComponent implements OnInit {
     this.form.controls.totalPurchase.patchValue(total.toFixed(2));
   }
 
-  async submit() {
+  async submit(formGroup: FormGroup, formDirective: FormGroupDirective) {
     this.form.disable();
     await this.inventory.create({ ...this.form.value });
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    this.resetForm(formGroup, formDirective);
     this.form.enable();
+  }
+
+  resetForm(formGroup: FormGroup, formDirective: FormGroupDirective): void {
+    formDirective.resetForm();
+    formGroup.reset();
   }
 }

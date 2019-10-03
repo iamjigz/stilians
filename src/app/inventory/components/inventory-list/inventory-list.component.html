@@ -13,7 +13,7 @@
           <mat-panel-title> {{ stock.name }} </mat-panel-title>
           <mat-panel-description>
             <span>Stock: {{ stock.total }} </span>
-            <small>Price: PHP {{ stock.price }}</small>
+            <small>PHP {{ stock.price }}</small>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -21,16 +21,15 @@
           <mat-list-item *ngFor="let item of stock.items">
             <mat-icon matListIcon>label_important</mat-icon>
             <span matLine>
-              <mat-grid-list cols="6">
+              <mat-grid-list cols="5">
                 <mat-grid-tile>
-                  Purchase Date:
+                  Purchased:
                   {{ item.purchaseDate.seconds * 1000 | date: 'MM-dd-yyyy' }}
                 </mat-grid-tile>
                 <mat-grid-tile>Supplier: {{ item.supplier }}</mat-grid-tile>
-                <mat-grid-tile>Name: {{ item.name }}</mat-grid-tile>
                 <mat-grid-tile>Quantity: {{ item.quantity }}</mat-grid-tile>
                 <mat-grid-tile>
-                  Purchase Price: PHP {{ item.purchasePrice }}
+                  Unit Price: PHP {{ item.purchasePrice }}
                 </mat-grid-tile>
                 <mat-grid-tile
                   >Retail Price: PHP {{ item.retailPrice }}
