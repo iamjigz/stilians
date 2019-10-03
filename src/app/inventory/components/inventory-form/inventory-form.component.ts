@@ -49,6 +49,12 @@ export class InventoryFormComponent implements OnInit {
     this.form.controls[name].patchValue(amount.toFixed(2));
   }
 
+  transformUpper(name: string) {
+    const value =
+      this.form.get(name).value === '' ? '' : this.form.get(name).value;
+    this.form.controls[name].patchValue(value.toUpperCase().trim());
+  }
+
   getTotalPurchase() {
     const fv = this.form.value;
     const total = isNaN(fv.purchasePrice * fv.quantity)

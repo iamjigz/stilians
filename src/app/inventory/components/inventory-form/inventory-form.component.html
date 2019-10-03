@@ -25,6 +25,7 @@
               placeholder="ID"
               id="id"
               formControlName="id"
+              (blur)="transformUpper('id')"
               [class.is-invalid]="isInvalid('id')"
             />
             <mat-icon matPrefix color="accent">label_important</mat-icon>
@@ -38,6 +39,7 @@
               placeholder="Name"
               id="name"
               formControlName="name"
+              (blur)="transformUpper('name')"
               [class.is-invalid]="isInvalid('name')"
             />
             <mat-icon matPrefix color="accent">label_important</mat-icon>
@@ -53,6 +55,7 @@
               placeholder="Supplier"
               id="supplier"
               formControlName="supplier"
+              (blur)="transformUpper('supplier')"
               [class.is-invalid]="isInvalid('supplier')"
             />
             <mat-icon matPrefix color="accent">label_important</mat-icon>
@@ -66,6 +69,7 @@
               placeholder="Generic Name"
               id="genericName"
               formControlName="genericName"
+              (blur)="transformUpper('genericName')"
               [class.is-invalid]="isInvalid('genericName')"
             />
             <mat-icon matPrefix color="accent">label_important</mat-icon>
@@ -80,6 +84,7 @@
               matInput
               placeholder="Quantity"
               type="number"
+              min="1"
               id="quantity"
               formControlName="quantity"
               (blur)="getTotalPurchase()"

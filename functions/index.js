@@ -38,6 +38,38 @@ exports.onInventoryAdd = functions.firestore
       .catch(err => console.error('Error', err))
   });
 
+
+exports.onInventoryDelete = functions.firestore
+  .document('inventory/{ref}')
+  .onDelete((snap, context) => {
+    const toDelete = snap.data();
+    const stockRef = db.collection('stock');
+
+    return stockRef
+      .where('name', '==', toDelete.name)
+      .get()
+      .then(snapshot => {
+        const snapData = (snapshot.empty) ? '' : snapshot.docs.map(doc => doc.data())[0];
+        let stockData = {};
+
+        if (snapData.total - toDelete.quantity === 0) {
+          return stockRef.doc(snapData.id).delete()
+        }
+
+        if (snapData.hasOwnProperty('items') && snapData.items.length >= 0) {
+          stockData = {
+            total: (snapshot.empty) ? toDelete.quantity : snapData.total - toDelete.quantity,
+            items: snapData.items.filter(item => item.ref !== toDelete.ref)
+          }
+        } else {
+          return stockRef.doc(snapData.id).delete()
+        }
+
+        return stockRef.doc(snapData.id).set(stockData, { merge: true })
+      })
+      .catch(err => console.error('Error', err))
+  });
+
 exports.onTransactionAdd = functions.firestore
   .document('transactions/{ref}')
   .onCreate((snap, context) => {
